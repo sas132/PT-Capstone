@@ -4,8 +4,12 @@
   "description": "pt app server",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "test"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
