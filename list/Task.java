@@ -5,6 +5,7 @@ import user.User;
 public class Task {
     private String goal;
     private boolean completed;
+	private int pointVal;
 
     private User assignedUser;
 
@@ -35,6 +36,14 @@ public class Task {
     public String getGoal() {
         return goal;
     }
+	
+	public int getPointVal() {
+		return pointVal;	
+	}
+	
+	public void setPointVal(int pointVal) {
+		this.pointVal = pointVal;	
+	}
 
     public void assignUser(User user) {
         this.assignedUser = user;
