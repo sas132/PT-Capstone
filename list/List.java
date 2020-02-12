@@ -32,8 +32,14 @@ public class List {
         this.tasks.add(task);
     }
 
-    public void removeTask() {
-        //This can be based on a string search, by index or whatever. Im leaving it until further progress is made
+    public void removeTask(String taskName) {
+        //TODO: make sure this works this easily??
+        tasks.remove(taskName);
+    }
+    
+    public void removeTask(int index) {
+        //TODO: check if index is valid
+        tasks.remove(index);
     }
 
     public void clearList() {
