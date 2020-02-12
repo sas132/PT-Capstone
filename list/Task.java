@@ -11,10 +11,13 @@ public class Task {
 
     public Task() {
         this.completed = false;
+		this.pointVal = 0;
     }
 
-    public Task(String goal) {
-        this.goal = goal;
+    public Task(String goal, int pointVal) {
+        this();
+		this.goal = goal;
+		this.pointVal = pointVal;
     }
 
     public void markTaskComplete() {
@@ -42,6 +45,10 @@ public class Task {
 	}
 	
 	public void setPointVal(int pointVal) {
+		if (pointVal <= 0) {
+			//TODO: PointVal must be 0 or positive	
+		}
+		
 		this.pointVal = pointVal;	
 	}
 
