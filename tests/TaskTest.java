@@ -1,17 +1,17 @@
-package tests.tests;
+package tests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import tests.Task;
-import tests.User;
+import list.Task;
+import user.User;
 
 class TaskTest {
 
-	private Task testTask;
-	private User dummyUser;
+	private list.Task testTask;
+	private user.User dummyUser;
 	
     @BeforeAll
     static void setup(){
