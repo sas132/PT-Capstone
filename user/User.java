@@ -2,7 +2,6 @@ package user;
 
 public class User {
     private String username;
-
     private int points;
 
     public User() {

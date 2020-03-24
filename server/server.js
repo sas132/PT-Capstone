@@ -18,28 +18,21 @@ app.get("/", function(request, response) {
   response.sendFile(__dirname + '/index.html');
 });
 
-
-/**
- * These are just me throwing stuff down.
- * Very open to ideas if you have any.
- * This is not at all set in stone in terms of... well... everything?
- * ¯\_(?)_/¯
- *
 //add app user
 app.post('/user', user.add);
 
 //gets all lists for a user
-app.get('/:user/lists', user.lists);
+app.get('/lists', user.lists);
 
 //gets all tasks in a list
-app.get('/:user/:list/tasks', list.tasks);
+app.get('/:list/tasks', list.tasks);
 
 //adds a task to the list
-app.post('/:user/:list/taskAdd', list.add);
+app.post('/:list/taskAdd', list.addTask);
 
 //assign task to user
-app.post('/:user/:list/', task.setUser);
-*/
+app.post('/:list/assign', task.setUser);
+
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT || 3000, function () {

@@ -27,7 +27,6 @@ public class List {
         this.name = name;
     }
 
-
     public void addTask(Task task) {
         this.tasks.add(task);
     }
@@ -45,5 +44,4 @@ public class List {
     public void clearList() {
         tasks.clear();
     }
-    
 }
