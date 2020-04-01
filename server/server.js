@@ -25,7 +25,7 @@ app.post('/user', user.add);
 app.get('/lists', user.lists);
 
 //gets all tasks in a list
-app.get('/:list/tasks', list.tasks);
+app.get('/:list/tasks', list.getTasks);
 
 //adds a task to the list
 app.post('/:list/taskAdd', list.addTask);

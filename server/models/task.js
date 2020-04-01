@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 let taskSchema = mongoose.Schema({
 	assignedUser: [{
-		type: Schema.Types.ObjectID,
+		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}],
 	completed: Boolean,

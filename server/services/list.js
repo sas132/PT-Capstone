@@ -17,7 +17,7 @@ module.exports = {
 	//assigns a user to the task
 	setUser: function(list, taskID, userID) {
 //TODO: Cannot figure out the proper formatting for this
-		return List.findByIdAndUpdate( list, {$set: { task[taskID]: userID}} ).exec();
+		return List.findByIdAndUpdate( list, {$set: { taskID: userID}} ).exec();
 	}
 
 }
