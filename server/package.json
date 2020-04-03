@@ -4,7 +4,7 @@
   "description": "pt app server",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",E
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
