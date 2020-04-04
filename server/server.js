@@ -45,7 +45,7 @@ app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
 
-app.get("/api/external", checkJwt, (req, res) => {
+app.get("/api/external", jwtCheck, (req, res) => {
   res.send({
     msg: "Your access token was successfully validated!"
   });
