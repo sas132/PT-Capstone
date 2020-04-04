@@ -18,6 +18,10 @@ app.get("/", function(request, response) {
   response.sendFile(__dirname + '/index.html');
 });
 
+app.get("/auth", (request, response) => {
+  response.send("test");
+})
+
 //add app user
 app.post('/user', user.add);
 
