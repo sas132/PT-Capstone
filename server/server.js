@@ -6,7 +6,7 @@ const app = express();
 // const { join } = require("path");
 
 // const authConfig = require("./auth_config.json");
-// const db = require("./models/db");
+const db = require("./models/db");
 
 // Handle form submissions
 const bodyParser = require('body-parser');
