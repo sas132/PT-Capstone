@@ -33,12 +33,15 @@ let user = require('./controllers/user');
 //   res.send('Secured Resource');
 // });
 
-app.use('/', express.static('public'))
+app.use(express.static(join(__dirname, "public")));
 
-// http://expressjs.com/en/starter/basic-routing.html
-// app.get("/", function(request, response) {
-//   response.sendFile(__dirname + '/index.html');
-// });
+app.get("/auth_config.json", (req, res) => {
+  res.sendFile(join(__dirname, "auth_config.json"));
+});
+
+app.get("/*", (_, res) => {
+  res.sendFile(join(__dirname, "index.html"));
+});
 
 app.get("/auth", (request, response) => {
   response.send("test");
