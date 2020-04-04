@@ -1,4 +1,5 @@
 {
   "domain": "polished-breeze-0878.auth0.com",
-  "clientId": "naoSD50rP4vhp6wI5EfoZKuRvMSxjYsa"
+  "clientId": "naoSD50rP4vhp6wI5EfoZKuRvMSxjYsa",
+  "audience": "https://doitappuwf.herokuapp.com"
 }
