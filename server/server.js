@@ -1,6 +1,8 @@
 // server.js
 const express = require('express');
 const app = express();
+const jwt = require('express-jwt');
+const jwks = require('jwks-rsa');
 
 const db = require("./models/db");
 
@@ -13,7 +15,7 @@ let list = require('./controllers/list');
 let task = require('./controllers/task');
 let user = require('./controllers/user');
 
-var jwtCheck = jwt({
+const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
