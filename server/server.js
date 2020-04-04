@@ -1,12 +1,12 @@
 // server.js
 const express = require('express');
 const app = express();
-const jwt = require('express-jwt');
-const jwks = require('jwks-rsa');
-const { join } = require("path");
+// const jwt = require('express-jwt');
+// const jwks = require('jwks-rsa');
+// const { join } = require("path");
 
-const authConfig = require("./auth_config.json");
-const db = require("./models/db");
+// const authConfig = require("./auth_config.json");
+// const db = require("./models/db");
 
 // Handle form submissions
 const bodyParser = require('body-parser');
