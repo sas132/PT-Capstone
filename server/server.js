@@ -21,19 +21,13 @@ const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
-    jwksRequestsPerMinute: 5,
+    jwksRequestsPerMinute: 500,
     jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
   }),
   audience: authConfig.audience,
   issuer: `https://${authConfig.domain}/`,
   algorithms: ['RS256']
 });
-
-// app.use(jwtCheck);
-
-// app.get('/authorized', function (req, res) {
-//   res.send('Secured Resource');
-// });
 
 app.use(express.static(join(__dirname, "public")));
 
