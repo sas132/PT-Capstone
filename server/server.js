@@ -30,7 +30,7 @@ const jwtCheck = jwt({
 app.use(jwtCheck);
 
 app.get('/authorized', function (req, res) {
-res.send('Secured Resource');
+  res.send('Secured Resource');
 });
 
 // http://expressjs.com/en/starter/basic-routing.html
