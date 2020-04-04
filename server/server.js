@@ -15,23 +15,23 @@ let list = require('./controllers/list');
 let task = require('./controllers/task');
 let user = require('./controllers/user');
 
-const jwtCheck = jwt({
-  secret: jwks.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: 'https://polished-breeze-0878.auth0.com/.well-known/jwks.json'
-  }),
-  audience: 'https://doitappuwf.herokuapp.com/auth',
-  issuer: 'https://polished-breeze-0878.auth0.com/',
-  algorithms: ['RS256']
-});
+// const jwtCheck = jwt({
+//   secret: jwks.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: 'https://polished-breeze-0878.auth0.com/.well-known/jwks.json'
+//   }),
+//   audience: 'https://doitappuwf.herokuapp.com/auth',
+//   issuer: 'https://polished-breeze-0878.auth0.com/',
+//   algorithms: ['RS256']
+// });
 
-app.use(jwtCheck);
+// app.use(jwtCheck);
 
-app.get('/authorized', function (req, res) {
-  res.send('Secured Resource');
-});
+// app.get('/authorized', function (req, res) {
+//   res.send('Secured Resource');
+// });
 
 app.use('/', express.static('public'))
 
