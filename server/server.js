@@ -35,7 +35,7 @@ app.use(express.static(join(__dirname, "public")));
 //   res.sendFile(join(__dirname, "auth_config.json"));
 // });
 
-app.get("/", (_, res) => {
+app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
 
