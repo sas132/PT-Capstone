@@ -31,9 +31,9 @@ let user = require('./controllers/user');
 
 app.use(express.static(join(__dirname, "public")));
 
-// app.get("/auth_config.json", (req, res) => {
-//   res.sendFile(join(__dirname, "auth_config.json"));
-// });
+app.get("/auth_config.json", (req, res) => {
+  res.sendFile(join(__dirname, "auth_config.json"));
+});
 
 app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "index.html"));
