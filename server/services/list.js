@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 const List = mongoose.model('List');
+const Task = mongoose.model('Task');
 
 module.exports = {
 
-	//adds task to list
+	//adds task to collection, links using list _id
 	addTask: function(listId, task) {
-//TODO: finish this
-		return List.create()
+		return Task.create({
+			listID: listId,
+			goal: task
+		})
 	},
 
 	//get tasks of a list
@@ -19,5 +22,4 @@ module.exports = {
 //TODO: Cannot figure out the proper formatting for this
 		return List.findByIdAndUpdate( list, {$set: { taskID: userID}} ).exec();
 	}
-
 }
