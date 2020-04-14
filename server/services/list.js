@@ -4,6 +4,13 @@ const Task = mongoose.model('Task');
 
 module.exports = {
 
+	//adds a new list
+	newList: function(name) {
+		return List.create({
+			name: name
+		})
+	},
+
 	//adds task to collection, links using list _id
 	addTask: function(listId, task) {
 		return Task.create({

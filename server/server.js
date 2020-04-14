@@ -9,9 +9,9 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let list = require('./controllers/list');
-let task = require('./controllers/task');
-let user = require('./controllers/user');
+const list = require('./controllers/list');
+const task = require('./controllers/task');
+const user = require('./controllers/user');
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function(request, response) {
@@ -25,8 +25,11 @@ app.get("/auth", (request, response) => {
 //add app user
 app.post('/user', user.add);
 
+//creates a new list
+app.post('/list/new', list.newList);
+
 //gets all lists for a user
-app.get('/lists', user.lists);
+app.get('/:user/lists', user.lists);
 
 //gets all tasks in a list
 app.get('/:list/tasks', list.getTasks);
