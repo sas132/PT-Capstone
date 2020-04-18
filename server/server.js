@@ -39,6 +39,10 @@ app.get("/", (_, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
 
+app.get("/test", (_, res) => {
+  res.sendFile(join(__dirname, "test.txt"));
+});
+
 app.get("/api/external", jwtCheck, (req, res) => {
   res.send({
     msg: "Your access token was successfully validated!"
