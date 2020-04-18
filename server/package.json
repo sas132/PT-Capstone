@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "echo Hello this is a test",
-    "heroku-postbuild": "echo Hello this is a test",
+    "heroku-postbuild": "echo "This is some text" > test.txt",
     "start": "node server.js"
   },
   "author": "",
