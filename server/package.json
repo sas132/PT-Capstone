@@ -4,6 +4,7 @@
   "description": "pt app server",
   "main": "server.js",
   "scripts": {
+    "build": "node test.js",
     "start": "node server.js"
   },
   "author": "",
