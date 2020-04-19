@@ -29,7 +29,7 @@ const jwtCheck = jwt({
   algorithms: ['RS256']
 });
 
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "build")));
 
 app.get("/auth_config.json", (req, res) => {
   res.sendFile(join(__dirname, "auth_config.json"));
