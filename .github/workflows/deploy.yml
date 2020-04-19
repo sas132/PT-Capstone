@@ -18,4 +18,4 @@ jobs:
           branch: "master" #OPTIONAL and DEFAULT - 'HEAD' (a.k.a your current branch)
           dontuseforce: false #OPTIONAL and DEFAULT - false
           usedocker: false #OPTIONAL and DEFAULT - false
-          appdir: "server" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
+          appdir: "" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
