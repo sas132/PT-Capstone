@@ -13,9 +13,9 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const list = require('./controllers/list');
-const task = require('./controllers/task');
-const user = require('./controllers/user');
+let list = require('./controllers/list');
+let task = require('./controllers/task');
+let user = require('./controllers/user');
 
 const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
@@ -60,11 +60,8 @@ app.use(function(err, req, res, next) {
 //add app user
 app.post('/user', user.add);
 
-//creates a new list
-app.post('/list/new', list.newList);
-
 //gets all lists for a user
-app.get('/:user/lists', user.lists);
+app.get('/lists', user.lists);
 
 //gets all tasks in a list
 app.get('/:list/tasks', list.getTasks);

@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 let listSchema = mongoose.Schema({
 	name: String,
-	owner: [{
+	task: [{
 		type: Schema.Types.ObjectId,
-		ref: 'User'
+		ref: 'Task'
 	}]
 })
 
