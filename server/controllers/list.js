@@ -1,5 +1,12 @@
 const listService = require('../services/list');
 
+//adds a new list
+const newList = async function(req, res) {
+	if(req.params.name) {
+		await listService.newList(req.params.name);
+	}
+}
+
 //add a task to a given list
 const addTask = async function(req, res) {
 	if(req.params.list && req.body.task.goal) {
@@ -24,5 +31,6 @@ const setUser = async function(req, res) {
 module.exports = {
 	addTask: addTask,
 	getTasks: getTasks,
-	setUser: setUser
+	setUser: setUser,
+	newList: newList
 }
