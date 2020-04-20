@@ -1,8 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { response } from 'express';
 
 function App() {
+
+  fetch('/api/external')
+    .then(response => response.json())
+    .then(console.log)
+    .catch(console.error)
+
   return (
     <div className="App">
       <header className="App-header">

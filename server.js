@@ -40,7 +40,9 @@ app.get("/auth_config.json", (req, res) => {
 // });
 
 app.get("/test", (_, res) => {
-  res.sendFile(join(__dirname, "test.txt"));
+  res.send({
+    msg: "hello this is a test"
+  })
 });
 
 app.get("/api/external", jwtCheck, (req, res) => {
