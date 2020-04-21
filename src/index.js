@@ -9,6 +9,7 @@ import config from "./auth_config.json";
 import history from "./utils/history";
 
 import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // A function that routes the user to the right place
 // after login

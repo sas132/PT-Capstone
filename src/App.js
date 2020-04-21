@@ -4,6 +4,9 @@ import FooterMenu from "./components/FooterMenu";
 import Content from "./components/Content";
 import Sidebar from "./components/Sidebar";
 import ListView from "./components/ListView";
+import Welcome from "./components/Welcome";
+
+import { Auth0Context } from "./react-auth0-spa";
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +21,7 @@ class App extends Component {
   componentDidMount() {
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions.bind(this));
+    this.setContent(<ListView />)
   }
 
   componentWillUnmount() {
@@ -32,12 +36,16 @@ class App extends Component {
   }
 
   setContent(content) {
-    console.log('setting content')
-    this.setState({ content });
+    const { isAuthenticated } = this.context;
+    console.log(isAuthenticated)
+    this.setState({ content: isAuthenticated ? content : (
+      <Welcome updateContent={(cont) => this.setContent(cont)}/>
+    )});
   }
 
   render() {
     const { windowWidth, content } = this.state;
+    const { isAuthenticated } = this.context;
 
     const styles = {
       white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -52,7 +60,7 @@ class App extends Component {
 
     const menuItems = styles.showSidebar
       ? [
-          { icon: `📃`, text: "Todo Lists", action: () => this.setContent(<ListView />)},
+          { icon: `📝`, text: "Todo Lists", action: () => this.setContent(<ListView />)},
           { icon: `🕶`, text: "Profile" },
           { icon: `⚙`, text: "Settings" }
         ]
@@ -75,7 +83,7 @@ class App extends Component {
         ) : (
           <TopBar styles={styles} />
         )}
-        <Content ww={windowWidth} styles={styles} comp={content} />
+        <Content windowWidth={windowWidth} styles={styles} comp={content} />
 
         {!styles.showSidebar && (
           <FooterMenu menuItems={menuItems} styles={styles} />
@@ -84,5 +92,7 @@ class App extends Component {
     );
   }
 }
+
+App.contextType = Auth0Context;
 
 export default App;
