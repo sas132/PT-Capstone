@@ -1,14 +1,14 @@
 import React from "react";
 import { useAuth0 } from "../react-auth0-spa";
-import ListView from './ListView';
 import Button from 'react-bootstrap/Button';
 
 const Welcome = ({ styles, updateContent}) => {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  if (isAuthenticated) updateContent(<ListView />)
+  if (isAuthenticated) updateContent()
 
   return (
     <div className="text-center">
+      <br />
       <h1>DO IT</h1>
       <div>An app that helps you get things done!</div>
       <br/>

@@ -4,6 +4,7 @@ import FooterMenu from "./components/FooterMenu";
 import Content from "./components/Content";
 import Sidebar from "./components/Sidebar";
 import ListView from "./components/ListView";
+import Profile from "./components/Profile";
 import Welcome from "./components/Welcome";
 
 import { Auth0Context } from "./react-auth0-spa";
@@ -37,15 +38,13 @@ class App extends Component {
 
   setContent(content) {
     const { isAuthenticated } = this.context;
-    console.log(isAuthenticated)
     this.setState({ content: isAuthenticated ? content : (
-      <Welcome updateContent={(cont) => this.setContent(cont)}/>
+      <Welcome updateContent={() => this.setContent(content)}/>
     )});
   }
 
   render() {
     const { windowWidth, content } = this.state;
-    const { isAuthenticated } = this.context;
 
     const styles = {
       white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -55,13 +54,18 @@ class App extends Component {
       showFooterMenuText: windowWidth > 500,
       showSidebar: windowWidth > 768,
       sidebarWidth: windowWidth < 1100 ? 50 : 150,
-      sidebarCollapsed: windowWidth < 1100
+      sidebarCollapsed: windowWidth < 1100,
+      windowWidth
     };
+
+    const actions = {
+      setContent: (cont) => this.setContent(cont)
+    }
 
     const menuItems = styles.showSidebar
       ? [
           { icon: `📝`, text: "Todo Lists", action: () => this.setContent(<ListView />)},
-          { icon: `🕶`, text: "Profile" },
+          { icon: `🕶`, text: "Profile", action: () => this.setContent(<Profile />) },
           { icon: `⚙`, text: "Settings" }
         ]
       : [
