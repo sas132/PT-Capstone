@@ -26,7 +26,7 @@ app.get("/auth", (request, response) => {
 app.post('/user', user.add);
 
 //creates a new list
-app.post('/list/new', list.newList);
+app.get('/list/new/:name', list.newList);
 
 //gets all lists for a user
 app.get('/:user/lists', user.lists);
