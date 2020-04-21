@@ -30,19 +30,19 @@ const setUser = async function(req, res) {
 
 //removes a task from a list
 	//if final task, delete list??
-	const removeTask = async function(req, res) {
-		if(req.params.list && req.params.task && req.body.user) {
-			//TODO: delete and unlink task doc from list
-		}
+const removeTask = async function(req, res) {
+	if(req.params.list && req.params.task && req.body.user) {
+		//TODO: delete and unlink task doc from list
 	}
-	
-	//clear a list of all tasks
-	const clearList = async function(req, res) {
-		if(req.params.list && req.params.user) {
-			//TODO: remove and unlink all tasks from list
-		}
+}
+
+//clear a list of all tasks
+const clearList = async function(req, res) {
+	if(req.params.list && req.params.user) {
+		//TODO: remove and unlink all tasks from list
 	}
-	
+}
+
 module.exports = {
 	addTask: addTask,
 	getTasks: getTasks,
