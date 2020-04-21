@@ -5,7 +5,7 @@ const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 const { join } = require("path");
 
-const authConfig = require("./auth_config.json");
+const authConfig = require("./src/auth_config.json");
 const db = require("./models/db");
 
 // Handle form submissions
@@ -35,9 +35,9 @@ app.get("/auth_config.json", (req, res) => {
   res.sendFile(join(__dirname, "auth_config.json"));
 });
 
-// app.get("/", (_, res) => {
-//   res.sendFile(join(__dirname, "index.html"));
-// });
+app.get("/home", (_, res) => {
+  res.sendFile(join(__dirname, "index.html"));
+});
 
 app.get("/test", (_, res) => {
   res.send({

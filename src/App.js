@@ -3,6 +3,7 @@ import TopBar from "./components/TopBar";
 import FooterMenu from "./components/FooterMenu";
 import Content from "./components/Content";
 import Sidebar from "./components/Sidebar";
+import ListView from "./components/ListView";
 
 class App extends Component {
   constructor(props) {
@@ -51,13 +52,7 @@ class App extends Component {
 
     const menuItems = styles.showSidebar
       ? [
-          { icon: `📃`, text: "Todo Lists", action: () => this.setContent(
-            (
-              <div>
-                test
-              </div>
-            )
-          )},
+          { icon: `📃`, text: "Todo Lists", action: () => this.setContent(<ListView />)},
           { icon: `🕶`, text: "Profile" },
           { icon: `⚙`, text: "Settings" }
         ]
