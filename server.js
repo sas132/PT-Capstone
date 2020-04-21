@@ -5,7 +5,7 @@ const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 const { join } = require("path");
 
-const authConfig = require("./src/auth_config.json");
+const authConfig = require("./auth_config.json");
 const db = require("./models/db");
 
 // Handle form submissions
@@ -35,14 +35,12 @@ app.get("/auth_config.json", (req, res) => {
   res.sendFile(join(__dirname, "auth_config.json"));
 });
 
-app.get("/home", (_, res) => {
+app.get("/", (_, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
 
 app.get("/test", (_, res) => {
-  res.send({
-    msg: "hello this is a test"
-  })
+  res.sendFile(join(__dirname, "test.txt"));
 });
 
 app.get("/api/external", jwtCheck, (req, res) => {
@@ -63,7 +61,7 @@ app.use(function(err, req, res, next) {
 app.post('/user', user.add);
 
 //creates a new list
-app.post('/list/new', list.newList);
+app.get('/list/new/:name', list.newList);
 
 //gets all lists for a user
 app.get('/:user/lists', user.lists);
