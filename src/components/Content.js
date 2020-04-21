@@ -1,11 +1,11 @@
 import React from "react";
 
-const Content = ({ styles, windowWidth, comp }) => {
+const Content = ({ styles, comp }) => {
   const { showSidebar } = styles;
 
-  const contentWidth = (windowWidth - (styles.sidebarWidth - 40)) > 1100
+  const contentWidth = (styles.windowWidth - (styles.sidebarWidth - 40)) > 1100
     ? 1100
-    : (windowWidth - (styles.sidebarWidth - 40))
+    : styles.windowWidth - (styles.sidebarWidth - 40)
 
   const contentStyle = {
     paddingTop: showSidebar ? 20 : styles.topBarHeight + 20,
