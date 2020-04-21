@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 const Welcome = ({ styles, updateContent}) => {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
-  if (isAuthenticated) updateContent()
+  if (isAuthenticated && updateContent) updateContent()
 
   return (
     <div className="text-center">
@@ -28,7 +28,5 @@ const Welcome = ({ styles, updateContent}) => {
     </div>
   );
 };
-
-// {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
 
 export default Welcome;

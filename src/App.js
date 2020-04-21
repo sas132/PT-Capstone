@@ -5,6 +5,7 @@ import Content from "./components/Content";
 import Sidebar from "./components/Sidebar";
 import ListView from "./components/ListView";
 import Profile from "./components/Profile";
+import Settings from "./components/Settings";
 import Welcome from "./components/Welcome";
 
 import { Auth0Context } from "./react-auth0-spa";
@@ -15,7 +16,7 @@ class App extends Component {
     this.state = {
       windowWidth: 0,
       windowHeight: 0,
-      content: <Welcome actions={this.actions}/>
+      content: <ListView actions={this.actions}/>
     };
 
     this.actions = {
@@ -41,10 +42,7 @@ class App extends Component {
   }
 
   setContent(content) {
-    const { isAuthenticated } = this.context;
-    this.setState({ content: isAuthenticated ? content : (
-      <Welcome actions={this.actions} updateContent={() => this.setContent(content)}/>
-    )});
+    this.setState({ content });
   }
 
   render() {
@@ -76,7 +74,8 @@ class App extends Component {
           },
           {
             icon: `⚙`,
-            text: "Settings"
+            text: "Settings",
+            action: () => this.setContent(<Settings />)
           }
         ]
       : [

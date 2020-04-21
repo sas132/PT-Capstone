@@ -1,5 +1,6 @@
 import React from "react";
 import Profile from './Profile';
+import Settings from './Settings';
 
 const TopBar = ({ styles, actions }) => {
   const { setContent } = actions;
@@ -33,6 +34,7 @@ const TopBar = ({ styles, actions }) => {
       <span>
         <div
           style={{ cursor: "pointer" }}
+          onClick={() => setContent(<Settings />)}
         >
           {`⚙️`}
         </div>

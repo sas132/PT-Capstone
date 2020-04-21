@@ -1,7 +1,10 @@
 import React from "react";
+import { useAuth0 } from "../react-auth0-spa";
+import Welcome from "./Welcome";
 
 const Content = ({ styles, comp }) => {
   const { showSidebar } = styles;
+  const { isAuthenticated } = useAuth0();
 
   const contentWidth = (styles.windowWidth - (styles.sidebarWidth - 40)) > 1100
     ? 1100
@@ -20,7 +23,7 @@ const Content = ({ styles, comp }) => {
       <div style={{
         border: "1px dashed #999"
       }}>
-        {comp}
+        {isAuthenticated ? comp : <Welcome />}
       </div>
     </div>
   );
