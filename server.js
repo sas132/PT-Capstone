@@ -61,7 +61,7 @@ app.use(function(err, req, res, next) {
 app.post('/user', user.add);
 
 //creates a new list
-app.get('/list/new/:name', list.newList);
+app.get('/list/new', list.newList);
 
 //gets all lists for a user
 app.get('/:user/lists', user.lists);
