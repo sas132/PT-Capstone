@@ -17,17 +17,10 @@ const Welcome = ({ styles, updateContent}) => {
       <small>Please Login to Continue...</small>
       <br/>
       <Button 
-        variant="primary"
-        onClick={() => loginWithRedirect({})}
-      >
-        Log in
-      </Button>
-      {" or "}
-      <Button 
         variant="success"
         onClick={() => loginWithRedirect({})}
       >
-        Sign Up
+        Log in / Sign Up
       </Button>
       <br/>
       <br/>
