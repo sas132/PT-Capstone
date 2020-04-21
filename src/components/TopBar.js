@@ -18,8 +18,8 @@ const TopBar = ({ styles }) => {
 
   return (
     <div style={topBarStyle}>
-      <span>{`😺️`}</span>
-      App
+      <span>{`🕶`}</span>
+      DO IT
       <span>{`⚙️`}</span>
     </div>
   );

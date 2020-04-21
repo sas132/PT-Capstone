@@ -9,7 +9,8 @@ class App extends Component {
     super(props);
     this.state = {
       windowWidth: 0,
-      windowHeight: 0
+      windowHeight: 0,
+      content: null
     };
   }
 
@@ -29,8 +30,13 @@ class App extends Component {
     this.setState({ windowWidth, windowHeight });
   }
 
+  setContent(content) {
+    console.log('setting content')
+    this.setState({ content });
+  }
+
   render() {
-    const { windowWidth } = this.state;
+    const { windowWidth, content } = this.state;
 
     const styles = {
       white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -45,20 +51,20 @@ class App extends Component {
 
     const menuItems = styles.showSidebar
       ? [
-          { icon: `😀`, text: "Item 1" },
-          { icon: `😉`, text: "Item 2" },
-          { icon: `😎`, text: "Item 3" },
-          { icon: `🤔`, text: "Item 4" },
-          { icon: `😛`, text: "Item 5" },
-          { icon: `😺️`, text: "Profile" },
+          { icon: `📃`, text: "Todo Lists", action: () => this.setContent(
+            (
+              <div>
+                test
+              </div>
+            )
+          )},
+          { icon: `🕶`, text: "Profile" },
           { icon: `⚙`, text: "Settings" }
         ]
       : [
-          { icon: `😀`, text: "Item 1" },
-          { icon: `😉`, text: "Item 2" },
-          { icon: `😎`, text: "Item 3" },
-          { icon: `🤔`, text: "Item 4" },
-          { icon: `😛`, text: "Item 5" }
+          { borders: false },
+          { icon: `➕`, text: "New List", action: () => {console.log('hello')}, borders: true },
+          { borders: false }
         ];
 
     return (
@@ -74,7 +80,7 @@ class App extends Component {
         ) : (
           <TopBar styles={styles} />
         )}
-        <Content ww={windowWidth} styles={styles} />
+        <Content ww={windowWidth} styles={styles} comp={content} />
 
         {!styles.showSidebar && (
           <FooterMenu menuItems={menuItems} styles={styles} />

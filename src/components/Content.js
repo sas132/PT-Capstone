@@ -1,6 +1,6 @@
 import React from "react";
 
-const Content = ({ styles, ww }) => {
+const Content = ({ styles, ww, comp }) => {
   const { showSidebar } = styles;
 
   const dummyPost = {
@@ -20,14 +20,7 @@ const Content = ({ styles, ww }) => {
 
   return (
     <div style={contentStyle}>
-      {posts.map((post, i) => {
-        return (
-          <div key={i} style={{ marginBottom: 40 }}>
-            <h2 style={{ marginBottom: 0 }}>{post.title}</h2>
-            <p>{post.summary}</p>
-          </div>
-        );
-      })}
+      {comp}
     </div>
   );
 };
