@@ -15,7 +15,8 @@ const TopBar = ({ styles, actions }) => {
     borderBottom: "1px solid #d8d8d8",
     fontWeight: "bold",
     padding: "0px 20px",
-    boxSizing: "border-box"
+    boxSizing: "border-box",
+    zIndex: 2
   };
 
   return (
