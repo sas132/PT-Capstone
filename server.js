@@ -60,22 +60,22 @@ app.use(function(err, req, res, next) {
 });
 
 //add app user
-app.post('/user', user.add);
+// app.post('/user', user.add);
 
-//creates a new list
-app.post('/list/new', list.newList);
+// //creates a new list
+// app.post('/list/new', list.newList);
 
-//gets all lists for a user
-app.get('/:user/lists', user.lists);
+// //gets all lists for a user
+// app.get('/:user/lists', user.lists);
 
-//gets all tasks in a list
-app.get('/:list/tasks', list.getTasks);
+// //gets all tasks in a list
+// app.get('/:list/tasks', list.getTasks);
 
-//adds a task to the list
-app.post('/:list/taskAdd', list.addTask);
+// //adds a task to the list
+// app.post('/:list/taskAdd', list.addTask);
 
-//assign task to user
-app.post('/:list/assign', task.setUser);
+// //assign task to user
+// app.post('/:list/assign', task.setUser);
 
 
 // listen for requests :)

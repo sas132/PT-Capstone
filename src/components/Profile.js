@@ -22,7 +22,7 @@ const Profile = () => {
             <Image src={user.picture} roundedCircle={true} fluid={true} alt="Profile" />
           </Col>
           <Col md="auto">
-            <h2>Name: {user.name}</h2>
+            <h3>Name: {user.name}</h3>
             <p>Email: {user.email}</p>
             {
               isAuthenticated && 
