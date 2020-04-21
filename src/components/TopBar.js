@@ -1,6 +1,8 @@
 import React from "react";
+import Profile from './Profile';
 
-const TopBar = ({ styles }) => {
+const TopBar = ({ styles, actions }) => {
+  const { setContent } = actions;
   const topBarStyle = {
     position: "fixed",
     top: 0,
@@ -18,9 +20,22 @@ const TopBar = ({ styles }) => {
 
   return (
     <div style={topBarStyle}>
-      <span>{`🕶`}</span>
+      <span>
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => setContent(<Profile />)}
+        >
+          {`🕶`}
+        </div>
+      </span>
       DO IT
-      <span>{`⚙️`}</span>
+      <span>
+        <div
+          style={{ cursor: "pointer" }}
+        >
+          {`⚙️`}
+        </div>
+      </span>
     </div>
   );
 };

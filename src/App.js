@@ -15,14 +15,18 @@ class App extends Component {
     this.state = {
       windowWidth: 0,
       windowHeight: 0,
-      content: null
+      content: <Welcome actions={this.actions}/>
     };
+
+    this.actions = {
+      setContent: (cont) => this.setContent(cont)
+    }
   }
 
   componentDidMount() {
     this.updateDimensions();
     window.addEventListener("resize", this.updateDimensions.bind(this));
-    this.setContent(<ListView />)
+    this.setContent(<ListView actions={this.actions}/>)
   }
 
   componentWillUnmount() {
@@ -39,7 +43,7 @@ class App extends Component {
   setContent(content) {
     const { isAuthenticated } = this.context;
     this.setState({ content: isAuthenticated ? content : (
-      <Welcome updateContent={() => this.setContent(content)}/>
+      <Welcome actions={this.actions} updateContent={() => this.setContent(content)}/>
     )});
   }
 
@@ -58,19 +62,31 @@ class App extends Component {
       windowWidth
     };
 
-    const actions = {
-      setContent: (cont) => this.setContent(cont)
-    }
-
     const menuItems = styles.showSidebar
       ? [
-          { icon: `📝`, text: "Todo Lists", action: () => this.setContent(<ListView />)},
-          { icon: `🕶`, text: "Profile", action: () => this.setContent(<Profile />) },
-          { icon: `⚙`, text: "Settings" }
+          {
+            icon: `📝`,
+            text: "Todo Lists",
+            action: () => this.setContent(<ListView actions={this.actions} />)
+          },
+          { 
+            icon: `🕶`,
+            text: "Profile",
+            action: () => this.setContent(<Profile />)
+          },
+          {
+            icon: `⚙`,
+            text: "Settings"
+          }
         ]
       : [
           { borders: false },
-          { icon: `➕`, text: "New List", action: () => {console.log('hello')}, borders: true },
+          {
+            icon: `➕`,
+            text: "New List",
+            action: () => this.setContent(<ListView actions={this.actions} />),
+            borders: true
+          },
           { borders: false }
         ];
 
@@ -83,14 +99,14 @@ class App extends Component {
         }}
       >
         {styles.showSidebar ? (
-          <Sidebar menuItems={menuItems} styles={styles} />
+          <Sidebar menuItems={menuItems} styles={styles} actions={this.actions} />
         ) : (
-          <TopBar styles={styles} />
+          <TopBar styles={styles} actions={this.actions} />
         )}
-        <Content windowWidth={windowWidth} styles={styles} comp={content} />
+        <Content styles={styles} comp={content} actions={this.actions} />
 
         {!styles.showSidebar && (
-          <FooterMenu menuItems={menuItems} styles={styles} />
+          <FooterMenu menuItems={menuItems} styles={styles} actions={this.actions} />
         )}
       </div>
     );
