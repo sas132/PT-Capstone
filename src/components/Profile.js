@@ -18,10 +18,10 @@ const Profile = () => {
       <br/>
       <Container>
         <Row>
-          <Col md="2">
+          <Col sm="1" md="2">
             <Image src={user.picture} roundedCircle={true} fluid={true} alt="Profile" />
           </Col>
-          <Col md="auto">
+          <Col sm="auto" md="auto">
             <h3>Name: {user.name}</h3>
             <p>Email: {user.email}</p>
             {
