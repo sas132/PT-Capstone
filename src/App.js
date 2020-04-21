@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
 
-  fetch('/api/external')
+  fetch('/test')
     .then(response => response.json())
     .then(console.log)
     .catch(console.error)
