@@ -74,12 +74,12 @@ class App extends Component {
             action: () => this.setContent(<Profile />)
           },
           { 
-            icon: `🕶`,
+            icon: `🕶️`,
             text: "Profile",
             action: () => this.setContent(<Profile />)
           },
           {
-            icon: `⚙`,
+            icon: `⚙️`,
             text: "Settings",
             action: () => this.setContent(<Settings />)
           }

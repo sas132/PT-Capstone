@@ -18,7 +18,7 @@ const Profile = () => {
       <br/>
       <Container>
         <Row>
-          <Col xs="4" md="2">
+          <Col xs="3" sm="3" md="2">
             <Image src={user.picture} roundedCircle={true} fluid={true} alt="Profile" />
           </Col>
           <Col xs="auto" md="auto">
