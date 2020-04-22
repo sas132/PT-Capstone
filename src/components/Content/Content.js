@@ -1,10 +1,12 @@
 import React from "react";
-import { useAuth0 } from "../react-auth0-spa";
-import Welcome from "./Welcome";
+import { useAuth0 } from "../../react-auth0-spa";
+import Welcome from "../Welcome/Welcome";
+import Loading from "../Loading/Loading";
 
 const Content = ({ styles, comp }) => {
   const { showSidebar } = styles;
   const { isAuthenticated } = useAuth0();
+  const loading = (isAuthenticated === undefined)
 
   const contentWidth = (styles.windowWidth - (styles.sidebarWidth - 40)) > 1100
     ? 1100
@@ -18,13 +20,20 @@ const Content = ({ styles, comp }) => {
     width: showSidebar ? contentWidth : "auto"
   };
 
-  return (
-    <div style={contentStyle}>
+  const viewToRender = loading
+    ? (
+      <Loading />
+    ) : (
       <div style={{
         border: "1px dashed #999"
       }}>
         {isAuthenticated ? comp : <Welcome />}
       </div>
+    )
+
+  return (
+    <div style={contentStyle}>
+      {viewToRender}
     </div>
   );
 };

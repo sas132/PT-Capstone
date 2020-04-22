@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import TopBar from "./components/TopBar";
-import FooterMenu from "./components/FooterMenu";
-import Content from "./components/Content";
-import Sidebar from "./components/Sidebar";
-import ListView from "./components/ListView";
-import Profile from "./components/Profile";
-import Settings from "./components/Settings";
-import Welcome from "./components/Welcome";
+import TopBar from "./components/Topbar/TopBar";
+import FooterMenu from "./components/FooterMenu/FooterMenu";
+import Content from "./components/Content/Content";
+import Sidebar from "./components/Sidebar/Sidebar";
+import ListView from "./components/ListView/ListView";
+import Profile from "./components/Profile/Profile";
+import Settings from "./components/Settings/Settings";
+import Welcome from "./components/Welcome/Welcome";
 
 import { Auth0Context } from "./react-auth0-spa";
 

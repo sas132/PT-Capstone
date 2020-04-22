@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth0 } from "../react-auth0-spa";
+import { useAuth0 } from "../../react-auth0-spa";
 
 const ListView = ({ styles }) => {
   const { getTokenSilently } = useAuth0();

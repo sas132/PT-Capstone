@@ -1,10 +1,10 @@
 import React from "react";
-import { useAuth0 } from "../react-auth0-spa";
+import { useAuth0 } from "../../react-auth0-spa";
 import Button from 'react-bootstrap/Button';
 
 const Welcome = ({ styles, updateContent}) => {
   const { isAuthenticated, loginWithRedirect } = useAuth0();
-  if (isAuthenticated && updateContent) updateContent()
+  // if (isAuthenticated && updateContent) updateContent()
 
   return (
     <div className="text-center">

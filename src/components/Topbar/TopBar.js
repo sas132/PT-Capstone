@@ -1,6 +1,6 @@
 import React from "react";
-import Profile from './Profile';
-import Settings from './Settings';
+import Profile from '../Profile/Profile';
+import Settings from '../Settings/Settings';
 
 const TopBar = ({ styles, actions }) => {
   const { setContent } = actions;
