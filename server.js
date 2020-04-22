@@ -44,7 +44,7 @@ app.get('/list/new', function(req, res) {
   });
 	//give page to enter list name
 });
-//app.post('/list/new', list.newList);
+app.post('/list/new', list.newList);
 
 // //gets all lists for a user
 // app.get('/:user/lists', user.lists);
