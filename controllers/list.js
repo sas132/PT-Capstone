@@ -4,6 +4,7 @@ const listService = require('../services/list');
 const newList = async function(req, res) {
 	if(req.body.name) {
 		const result = await listService.newList(req.body.name);
+		console.log(result);
 	}
 	res.redirect('/list/new');
 }
