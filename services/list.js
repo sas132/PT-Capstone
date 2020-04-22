@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const List = mongoose.model('List');
-const Task = mongoose.model('Task');
+const List = require('../models/List');
+const Task = require('../models/Task');
 
 module.exports = {
 
