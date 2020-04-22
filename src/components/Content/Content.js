@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import Welcome from "../Welcome/Welcome";
 import Loading from "../Loading/Loading";
 
-const Content = ({ styles, comp }) => {
+const Content = ({ styles, comp, actions }) => {
   const { showSidebar } = styles;
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getTokenSilently } = useAuth0();
+  const [ userSent, setUserSent ] = useState(false);
   const loading = (isAuthenticated === undefined)
+
+  useEffect(() => {
+    if (isAuthenticated && !userSent) {
+      setUserSent(true);
+      getTokenSilently()
+      .then(token => {
+        return fetch("/user", {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      })
+      .catch(err => {
+        console.warn(err);
+        setUserSent(false);
+      })
+    }
+  }, [isAuthenticated, userSent, getTokenSilently])
 
   const contentWidth = (styles.windowWidth - (styles.sidebarWidth - 40)) > 1100
     ? 1100

@@ -13,7 +13,13 @@ const addList = async function(req, res) {
   }
 }
 
+const add = async function(req, res) {
+  const result = await userService.addUser(req.userData);
+  console.log(result)
+}
+
 module.exports = {
   removeUser: removeUser,
-  addList: addList
+  addList: addList,
+  add
 }

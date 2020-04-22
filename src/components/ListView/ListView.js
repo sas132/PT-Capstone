@@ -8,7 +8,8 @@ const ListView = ({ styles }) => {
     try {
       console.log('hello')
       const token = await getTokenSilently()
-      let response = await fetch("/api/external", {
+      let response = await fetch("/user", {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
         }

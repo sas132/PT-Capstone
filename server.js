@@ -1,51 +1,21 @@
 // server.js
 const express = require('express');
 const app = express();
-const jwt = require('express-jwt');
-const jwks = require('jwks-rsa');
 const { join } = require("path");
 
-const authConfig = require("./src/auth_config.json");
-const AuthenticationClient = require("auth0").AuthenticationClient;
-const auth0 = new AuthenticationClient(authConfig)
-
 const db = require("./models/db");
+const { jwtCheck, getUserData } = require('./services/token')
 
 // Handle form submissions
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(cors({ origin: 'http://localhost:3001' }));
-
 const list = require('./controllers/list');
 const task = require('./controllers/task');
 const user = require('./controllers/user');
 
-const jwtCheck = jwt({
-  secret: jwks.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 10,
-    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
-  }),
-  audience: authConfig.audience,
-  issuer: `https://${authConfig.domain}/`,
-  algorithms: ['RS256']
-});
-
-const getUserData = (req, res, next) => {
-  const token = req.headers.authorization.replace('Bearer ', '')
-  console.log(token)
-  auth0.getProfile(token, function (err, userInfo) {
-    if (err) {
-      console.warn(err)
-    }
-    req.userData = userInfo
-    next()
-  });
-}
-
+// serve the built react app
 app.use(express.static(join(__dirname, "build")));
 
 app.get("/api/external", jwtCheck, getUserData, (req, res) => {
@@ -65,7 +35,7 @@ app.use(function(err, req, res, next) {
 });
 
 //add app user
-// app.post('/user', user.add);
+app.post('/user', jwtCheck, getUserData, user.add);
 
 // //creates a new list
 // app.post('/list/new', list.newList);

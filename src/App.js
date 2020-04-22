@@ -47,7 +47,7 @@ class App extends Component {
   }
 
   render() {
-    const { windowWidth, content } = this.state;
+    const { windowWidth, content, user } = this.state;
 
     const styles = {
       white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
