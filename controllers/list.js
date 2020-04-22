@@ -12,6 +12,7 @@ const addTask = async function(req, res) {
 	if(req.params.list && req.body.task.goal) {
 		await listService.addTask(req.params.list, req.body.task);
 	}
+	res.redirect('/list/new');
 }
 
 //get tasks from a given list
@@ -29,7 +30,6 @@ const setUser = async function(req, res) {
 }
 
 /*
-
 //removes a task from a list
 	//if final task, delete list??
 const removeTask = async function(req, res) {
@@ -44,7 +44,6 @@ const clearList = async function(req, res) {
 		await listService.clearList(req.params.list, req.params.user);
 	}
 }
-
 */
 
 module.exports = {

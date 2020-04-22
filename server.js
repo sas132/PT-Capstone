@@ -46,16 +46,16 @@ app.get('/list/new', function(req, res) {
 });
 app.post('/list/new', list.newList);
 
-// //gets all lists for a user
+//gets all lists for a user
 // app.get('/:user/lists', user.lists);
 
-// //gets all tasks in a list
+//gets all tasks in a list
 // app.get('/:list/tasks', list.getTasks);
 
-// //adds a task to the list
+//adds a task to the list
 // app.post('/:list/taskAdd', list.addTask);
 
-// //assign task to user
+//assign task to user
 // app.post('/:list/assign', task.setUser);
 
 
