@@ -24,11 +24,13 @@ const Profile = () => {
               id="switch1"
               label="There are no settings yet."
             />
+            <br/>
             <Form.Check 
               type="switch"
               id="switch2"
               label="Dark Mode"
             />
+            <br/>
             <Form.Check 
               type="switch"
               id="switch3"

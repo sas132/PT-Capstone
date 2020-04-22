@@ -1,4 +1,6 @@
 import React from "react";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 
 const Sidebar = ({ menuItems, styles }) => {
   const sidebarStyle = {
@@ -37,13 +39,23 @@ const Sidebar = ({ menuItems, styles }) => {
     <div style={sidebarStyle}>
       <div style={logoStyle}>{styles.sidebarCollapsed ? "DO IT" : "DO IT"}</div>
       {menuItems.map(item => (
-        <div 
-          style={menuItemStyle}
-          onClick={item.action || (() => {})}
+        <OverlayTrigger
+          key={item.text}
+          placement="right"
+          overlay={
+            <Tooltip id={`tooltip-${item.text}`}>
+              {item.text}
+            </Tooltip>
+          }
         >
-          <span style={iconStyle}>{item.icon}</span>
-          {!styles.sidebarCollapsed && item.text}
-        </div>
+          <div 
+            style={menuItemStyle}
+            onClick={item.action || (() => {})}
+          >
+            <span style={iconStyle}>{item.icon}</span>
+            {!styles.sidebarCollapsed && item.text}
+          </div>
+        </OverlayTrigger>
       ))}
     </div>
   );
