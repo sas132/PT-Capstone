@@ -38,8 +38,8 @@ const Sidebar = ({ menuItems, styles }) => {
   return (
     <div style={sidebarStyle}>
       <div style={logoStyle}>{styles.sidebarCollapsed ? "DO IT" : "DO IT"}</div>
-      {menuItems.map(item => (
-        <OverlayTrigger
+      {menuItems.map(item => {
+        return (<OverlayTrigger
           key={item.text}
           placement="right"
           overlay={
@@ -55,8 +55,8 @@ const Sidebar = ({ menuItems, styles }) => {
             <span style={iconStyle}>{item.icon}</span>
             {!styles.sidebarCollapsed && item.text}
           </div>
-        </OverlayTrigger>
-      ))}
+        </OverlayTrigger>)
+      })}
     </div>
   );
 };
