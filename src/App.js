@@ -16,6 +16,7 @@ class App extends Component {
     this.state = {
       windowWidth: 0,
       windowHeight: 0,
+      dark: false,
       content: <ListView actions={this.actions}/>
     };
 
@@ -68,6 +69,11 @@ class App extends Component {
             action: () => this.setContent(<ListView actions={this.actions} />)
           },
           { 
+            icon: `👩`,
+            text: "People",
+            action: () => this.setContent(<Profile />)
+          },
+          { 
             icon: `🕶`,
             text: "Profile",
             action: () => this.setContent(<Profile />)
@@ -80,9 +86,15 @@ class App extends Component {
         ]
       : [
           { borders: false },
+          // { 
+          //   icon: `👨‍👧‍👦➕`,
+          //   text: "Add Contact",
+          //   action: () => this.setContent(<Profile />),
+          //   borders: true
+          // },
           {
-            icon: `➕`,
-            text: "New List",
+            icon: `📝➕`,
+            text: "Add List",
             action: () => this.setContent(<ListView actions={this.actions} />),
             borders: true
           },
