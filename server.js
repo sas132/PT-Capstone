@@ -67,8 +67,14 @@ app.use(function(err, req, res, next) {
 //add app user
 // app.post('/user', user.add);
 
-// //creates a new list
-// app.post('/list/new', list.newList);
+//creates a new list
+app.get('/list/new', function(req, res) {
+  res.send({
+    msg: "Create list"
+  });
+	//give page to enter list name
+});
+//app.post('/list/new', list.newList);
 
 // //gets all lists for a user
 // app.get('/:user/lists', user.lists);

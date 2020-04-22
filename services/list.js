@@ -12,9 +12,9 @@ module.exports = {
 	},
 
 	//adds task to collection, links using list _id
-	addTask: function(listId, task) {
+	addTask: function(list, task) {
 		return Task.create({
-			listID: listId,
+			list: list,
 			goal: task
 		})
 	},
@@ -25,8 +25,18 @@ module.exports = {
 	},
 
 	//assigns a user to the task
-	setUser: function(list, taskID, userID) {
-//TODO: Cannot figure out the proper formatting for this
-		return List.findByIdAndUpdate( list, {$set: { taskID: userID}} ).exec();
+	setUser: function(taskID, userID) {
+		return List.findByIdAndUpdate( taskID, {$set: {assignedUser: userID}}, {new: true}).exec();
+	},
+
+	//not AS important
+	/*
+	removeTask: function(list, task, user) {
+		return List.findByIdAndDelete()
+	},
+
+	clearList: function(list, user) {
+		return List.remove
 	}
+	*/
 }
