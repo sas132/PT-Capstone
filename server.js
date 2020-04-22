@@ -39,21 +39,23 @@ app.post('/user', jwtCheck, getUserData, user.add);
 
 //creates a new list
 app.get('/list/new', function(req, res) {
-  res.send({
-    msg: "Create list"
-  });
-	//give page to enter list name
+  res.status(200);
+	//TODO: give page to enter list name?
 });
 app.post('/list/new', list.newList);
 
+//adds a task to the list
+app.get('/list/add', function (req, res) {
+  res.status(200);
+  //TODO: give page that allows entering task data
+});
+app.post('/list/add', list.addTask);
+
 //gets all lists for a user
-// app.get('/:user/lists', user.lists);
+// app.get('/lists', user.lists);
 
 //gets all tasks in a list
 // app.get('/:list/tasks', list.getTasks);
-
-//adds a task to the list
-// app.post('/:list/taskAdd', list.addTask);
 
 //assign task to user
 // app.post('/:list/assign', task.setUser);

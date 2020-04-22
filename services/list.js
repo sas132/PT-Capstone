@@ -14,8 +14,8 @@ module.exports = {
 	//adds task to collection, links using list _id
 	addTask: function(list, task) {
 		return Task.create({
-			list: list,
-			goal: task
+			listID: list,
+			task: task
 		})
 	},
 

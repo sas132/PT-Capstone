@@ -3,17 +3,17 @@ const listService = require('../services/list');
 //adds a new list
 const newList = async function(req, res) {
 	if(req.body.name) {
-		const result = await listService.newList(req.body.name);
-		console.log(result);
+		await listService.newList(req.body.name);
 	}
-	res.redirect('/list/new');
+	res.redirect('/list/new'); //could also redirect back home??
 }
 
 //add a task to a given list
 const addTask = async function(req, res) {
-	if(req.params.list && req.body.task.goal) {
-		await listService.addTask(req.params.list, req.body.task);
+	if(req.body.listID && req.body.task) {
+		await listService.addTask(req.params.listID, req.body.task);
 	}
+	res.redirect('/list/add');
 }
 
 //get tasks from a given list
