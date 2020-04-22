@@ -6,12 +6,17 @@ const jwks = require('jwks-rsa');
 const { join } = require("path");
 
 const authConfig = require("./src/auth_config.json");
+const AuthenticationClient = require("auth0").AuthenticationClient;
+const auth0 = new AuthenticationClient(authConfig)
+
 const db = require("./models/db");
 
 // Handle form submissions
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// app.use(cors({ origin: 'http://localhost:3001' }));
 
 const list = require('./controllers/list');
 const task = require('./controllers/task');
@@ -21,7 +26,7 @@ const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
-    jwksRequestsPerMinute: 500,
+    jwksRequestsPerMinute: 10,
     jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
   }),
   audience: authConfig.audience,
@@ -29,29 +34,29 @@ const jwtCheck = jwt({
   algorithms: ['RS256']
 });
 
+const getUserData = (req, res, next) => {
+  const token = req.headers.authorization.replace('Bearer ', '')
+  console.log(token)
+  auth0.getProfile(token, function (err, userInfo) {
+    if (err) {
+      console.warn(err)
+    }
+    req.userData = userInfo
+    next()
+  });
+}
+
 app.use(express.static(join(__dirname, "build")));
 
-app.get("/auth_config.json", (req, res) => {
-  res.sendFile(join(__dirname, "auth_config.json"));
-});
-
-app.get("/home", (_, res) => {
-  res.sendFile(join(__dirname, "index.html"));
-});
-
-app.get("/test", (_, res) => {
-  res.send({
-    msg: "hello this is a test"
-  })
-});
-
-app.get("/api/external", jwtCheck, (req, res) => {
+app.get("/api/external", jwtCheck, getUserData, (req, res) => {
+  console.log('hello', req.userData)
   res.send({
     msg: "Your access token was successfully validated!"
   });
 });
 
 app.use(function(err, req, res, next) {
+  console.log('hello')
   if (err.name === "UnauthorizedError") {
     return res.status(401).send({ msg: "Invalid token" });
   }

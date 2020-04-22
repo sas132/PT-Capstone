@@ -2,15 +2,27 @@ import React from "react";
 import { useAuth0 } from "../react-auth0-spa";
 
 const ListView = ({ styles }) => {
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { getTokenSilently } = useAuth0();
+
+  const apiTest = async () => {
+    try {
+      console.log('hello')
+      const token = await getTokenSilently()
+      let response = await fetch("/api/external", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      response = await response.json()
+      console.log(response)
+    } catch(err) {
+      console.warn(err)
+    }
+  }
 
   return (
     <div>
-        {!isAuthenticated && (
-        <button onClick={() => loginWithRedirect({})}>Log in</button>
-        )}
-
-        {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
+      <button onClick={() => apiTest()}>test</button>
     </div>
   );
 };
