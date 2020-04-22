@@ -27,7 +27,7 @@ const TopBar = ({ styles, actions }) => {
           style={{ cursor: "pointer" }}
           onClick={() => setContent(<Profile />)}
         >
-          {`🕶`}
+          {`🕶️`}
         </div>
       </span>
       DO IT
