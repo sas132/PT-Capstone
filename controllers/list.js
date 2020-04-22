@@ -2,10 +2,10 @@ const listService = require('../services/list');
 
 //adds a new list
 const newList = async function(req, res) {
-	if(req.body.name) {
+//	if(req.body.name) {
 		const result = await listService.newList(req.body.name);
 		console.log(result);
-	}
+//	}
 	res.redirect('/list/new');
 }
 
