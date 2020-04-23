@@ -1,4 +1,4 @@
-const listService = require('../services/list');
+const listService = require('../services/listService');
 
 //adds a new list
 const newList = async function(req, res) {
@@ -18,9 +18,10 @@ const addTask = async function(req, res) {
 
 //get tasks from a given list
 const getTasks = async function(req, res) {
-	if(req.params.list) {
-		await listService.getTasks(req.params.list);
-	}
+	let tasks = await listService.getTasks(req.params.list);
+	res.send({
+		msg: JSON.stringify(tasks)
+	});
 }
 
 //assign a task to a user

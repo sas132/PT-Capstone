@@ -21,7 +21,7 @@ module.exports = {
 
 	//get tasks of a list
 	getTasks: function(list) {
-		return List.findById(list).exec();
+		return List.find( {listID: list} ).exec();
 	},
 
 	//assigns a user to the task
