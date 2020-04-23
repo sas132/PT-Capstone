@@ -92,6 +92,14 @@ const ListView = ({ styles, actions }) => {
     setLists(newLists)
   }
 
+  const updateTaskCompleted = (listIdx, taskIdx) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    const task = list.tasks[taskIdx];
+    task.completed = !task.completed;
+    setLists(newLists)
+  }
+
   const apiTest = async () => {
     try {
       console.log('hello')
@@ -153,7 +161,18 @@ const ListView = ({ styles, actions }) => {
                           return (
                             <Card key={`${task.assignedUser}${taskIdx}`}>
                               <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
-                                {`${taskIdx + 1}. ${task.task}`}
+                                <span>
+                                  <span style={{marginTop: '2px', overflow: 'hidden'}}>{`${taskIdx + 1}. ${task.task}`}</span>
+                                  <Button
+                                    size="sm"
+                                    className="float-right"
+                                    variant={`outline-${task.completed ? 'success' : 'danger'}`}
+                                    onClick={(e) => {e.stopPropagation(); updateTaskCompleted(listIdx, taskIdx)}}
+                                  >
+                                    {task.completed ? '✔':'❌'}
+                                  </Button>
+                                  <span className="float-right" style={{ marginTop: '2px', paddingRight: '5px'}}>Completed: </span>
+                                </span>
                               </Accordion.Toggle>
                               <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
                                 <Card.Body>
