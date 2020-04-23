@@ -7,8 +7,7 @@ let taskSchema = mongoose.Schema({
 		ref: 'User'
 	}],
 	completed: Boolean,
-	goal: String,
-	pointVal: Number,
+	task: String,
 	listID: String
 })
 

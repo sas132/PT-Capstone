@@ -1,4 +1,4 @@
-const listService = require('../services/list');
+const listService = require('../services/listService');
 
 //adds a new list
 const newList = async function(req, res) {
@@ -11,16 +11,17 @@ const newList = async function(req, res) {
 //add a task to a given list
 const addTask = async function(req, res) {
 	if(req.body.listID && req.body.task) {
-		await listService.addTask(req.params.listID, req.body.task);
+		await listService.addTask(req.body.listID, req.body.task);
 	}
 	res.redirect('/list/add');
 }
 
 //get tasks from a given list
 const getTasks = async function(req, res) {
-	if(req.params.list) {
-		await listService.getTasks(req.params.list);
-	}
+	let tasks = await listService.getTasks(req.params.list);
+	res.send({
+		msg: JSON.stringify(tasks)
+	});
 }
 
 //assign a task to a user

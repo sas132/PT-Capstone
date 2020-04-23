@@ -1,4 +1,4 @@
-const userService = require('../services/user');
+const userService = require('../services/userService');
 
 //remove list from user
 //I dont remember what I meant when I typed these words...

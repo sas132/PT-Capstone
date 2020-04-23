@@ -51,11 +51,16 @@ app.get('/list/add', function (req, res) {
 });
 app.post('/list/add', list.addTask);
 
+//gets all tasks in a list
+app.get('/:list', function (req, res) {
+  res.status(200);
+  //allows user to select a task?
+  //or should this just run for all lists and display all info in one go?
+});
+app.post('/list/tasks', list.getTasks);
+
 //gets all lists for a user
 // app.get('/lists', user.lists);
-
-//gets all tasks in a list
-// app.get('/:list/tasks', list.getTasks);
 
 //assign task to user
 // app.post('/:list/assign', task.setUser);
