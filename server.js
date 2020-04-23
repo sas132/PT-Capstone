@@ -39,22 +39,26 @@ app.post('/user', jwtCheck, getUserData, user.add);
 
 //creates a new list
 app.get('/list/new', function(req, res) {
-  res.status(200);
-	//TODO: give page to enter list name?
+  res.send({
+    msg: "new list"
+  });
 });
 app.post('/list/new', list.newList);
 
 //adds a task to the list
 app.get('/list/add', function (req, res) {
-  res.status(200);
-  re.redirect('/');
-  //TODO: give page that allows entering task data
+  res.send({
+    msg: "add get"
+  });
 });
 app.post('/list/add', list.addTask);
 
 //gets all tasks in a list
 app.get('/list', function (req, res) {
   res.status(200);
+  res.send({
+    msg: "get List"
+  });
   //allows user to select a task?
   //or should this just run for all lists and display all info in one go?
 });
