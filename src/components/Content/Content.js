@@ -41,9 +41,8 @@ const Content = ({ styles, comp, actions }) => {
   };
 
   const viewToRender = loading
-    ? (
-      <Loading />
-    ) : (
+    ? (<Loading />)
+    : (
       <div style={{
         border: "1px dashed #999"
       }}>
