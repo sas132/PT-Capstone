@@ -22,11 +22,11 @@ const getUserData = async (req, res, next) => {
     const token = req.headers.authorization.replace('Bearer ', '');
     const userInfo = await auth0.getProfile(token);
     req.userData = {
-      auth_id: userInfo.sub,
+      authId: userInfo.sub,
       name: userInfo.name,
       nickname: userInfo.nickname,
       email: userInfo.email,
-      email_verified: userInfo.email_verified,
+      emailVerified: userInfo.email_verified,
       picture: userInfo.picture
     };
     next();

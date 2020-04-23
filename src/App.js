@@ -6,7 +6,6 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import ListView from "./components/ListView/ListView";
 import Profile from "./components/Profile/Profile";
 import Settings from "./components/Settings/Settings";
-import Welcome from "./components/Welcome/Welcome";
 
 import { Auth0Context } from "./react-auth0-spa";
 
@@ -47,7 +46,7 @@ class App extends Component {
   }
 
   render() {
-    const { windowWidth, content, user } = this.state;
+    const { windowWidth, content } = this.state;
 
     const styles = {
       white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
@@ -86,14 +85,8 @@ class App extends Component {
         ]
       : [
           { borders: false },
-          // { 
-          //   icon: `👨‍👧‍👦➕`,
-          //   text: "Add Contact",
-          //   action: () => this.setContent(<Profile />),
-          //   borders: true
-          // },
           {
-            icon: `📝➕`,
+            icon: `📝`,
             text: "Add List",
             action: () => this.setContent(<ListView actions={this.actions} />),
             borders: true
