@@ -68,14 +68,10 @@ app.post('/list', list.getTasks);
 */
 
 //create new task with no assigned user, return created task
-//app.post('/task/new', list.newTask);
-app.post('/task/new', function(req, res) {
-  res.send({
-    msg: 'create new task'
-  });
-})
+app.post('/task/new', task.newTask);
 
 //update list by id
+//app.put('/list', list.update);
 app.put('/list', function(req, res) {
   res.send({
     msg: 'update list by id'
@@ -83,6 +79,7 @@ app.put('/list', function(req, res) {
 })
 
 //update task by id
+//app.put('/task', task.update);
 app.put('/task', function(req, res) {
   res.send({
     msg: 'update task by id'
