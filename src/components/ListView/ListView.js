@@ -30,7 +30,7 @@ const ListView = ({ styles }) => {
   const addNewList = () => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const newList = JSON.parse(JSON.stringify(listTemplate));
-    newLists.unshift(newList);
+    newLists.push(newList);
     newList.title = 'New List';
     newList.description = 'Description...';
     setLists(newLists)
@@ -69,18 +69,6 @@ const ListView = ({ styles }) => {
         <Row>
           <Col>
             <h4 className="text-center">Your Lists</h4>
-          </Col>
-        </Row>
-        <br/>
-        <Row>
-          <Col>
-            <Button
-              variant="primary"
-              block
-              onClick={() => addNewList()}
-            >
-              <span style={{fontSize: 20}} >+</span> New List
-            </Button>
           </Col>
         </Row>
         <br/>
@@ -126,6 +114,18 @@ const ListView = ({ styles }) => {
             )
           })}
         </Accordion>
+        <br/>
+        <Row>
+          <Col>
+            <Button
+              variant="primary"
+              block
+              onClick={() => addNewList()}
+            >
+              <span style={{fontSize: 20}} >+</span> New List
+            </Button>
+          </Col>
+        </Row>
       </Container>
       <br/>
     </>

@@ -64,14 +64,14 @@ class App extends Component {
       ? [
           {
             icon: `📝`,
-            text: "Todo Lists",
+            text: "To-Do Lists",
             action: () => this.setContent(<ListView actions={this.actions} />)
           },
-          { 
-            icon: `👩`,
-            text: "People",
-            action: () => this.setContent(<Profile />)
-          },
+          // { 
+          //   icon: `👩`,
+          //   text: "People",
+          //   action: () => this.setContent(<Profile />)
+          // },
           { 
             icon: `🕶️`,
             text: "Profile",
@@ -87,7 +87,7 @@ class App extends Component {
           { borders: false },
           {
             icon: `📝`,
-            text: "Add List",
+            text: "To-Do Lists",
             action: () => this.setContent(<ListView actions={this.actions} />),
             borders: true
           },
