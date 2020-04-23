@@ -8,7 +8,7 @@ let taskSchema = mongoose.Schema({
 	}],
 	completed: Boolean,
 	task: String,
-	listID: String
+	points: Number
 })
 
 module.exports = mongoose.model('Task', taskSchema);
