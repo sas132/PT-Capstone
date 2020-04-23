@@ -17,13 +17,10 @@ const jwtCheck = jwt({
   algorithms: ['RS256']
 });
 
-const getUserData = (req, res, next) => {
-  const token = req.headers.authorization.replace('Bearer ', '')
-  auth0.getProfile(token, function (err, userInfo) {
-    if (err) {
-      console.warn(err)
-    }
-
+const getUserData = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.replace('Bearer ', '');
+    const userInfo = await auth0.getProfile(token);
     req.userData = {
       auth_id: userInfo.sub,
       name: userInfo.name,
@@ -32,9 +29,11 @@ const getUserData = (req, res, next) => {
       email_verified: userInfo.email_verified,
       picture: userInfo.picture
     };
-
     next();
-  });
+  } catch(err) {
+    console.warn(err)
+    res.status(500).send()
+  }
 }
 
 module.exports = {

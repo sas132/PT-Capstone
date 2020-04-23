@@ -14,8 +14,13 @@ const addList = async function(req, res) {
 }
 
 const add = async function(req, res) {
-  const result = await userService.addUser(req.userData);
-  console.log(result)
+  try {
+    await userService.addUser(req.userData);
+    res.status(200).send();
+  } catch(err) {
+    res.status(500).send({msg: err});
+    console.warn(err);
+  }
 }
 
 module.exports = {
