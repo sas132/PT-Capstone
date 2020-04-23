@@ -45,13 +45,15 @@ app.get('/list/new', function(req, res) {
 });
 app.post('/list/new', list.newList);
 
+/* TO BE REPLACED WITH list.update
 //adds a task to the list
 app.get('/list/add', function (req, res) {
   res.send({
-    msg: "add get"
+    msg: "add task to a list"
   });
 });
 app.post('/list/add', list.addTask);
+
 
 //gets all tasks in a list
 app.get('/list', function (req, res) {
@@ -63,12 +65,53 @@ app.get('/list', function (req, res) {
   //or should this just run for all lists and display all info in one go?
 });
 app.post('/list', list.getTasks);
+*/
+
+//create new task with no assigned user, return created task
+//app.post('/task/new', list.newTask);
+app.post('/task/new', function(req, res) {
+  res.send({
+    msg: 'create new task'
+  });
+})
+
+//update list by id
+app.put('/list', function(req, res) {
+  res.send({
+    msg: 'update list by id'
+  });
+})
+
+//update task by id
+app.put('/task', function(req, res) {
+  res.send({
+    msg: 'update task by id'
+  });
+})
 
 //gets all lists for a user
-// app.get('/lists', user.lists);
+//app.get('/user/lists', user.getLists);
+app.get('/user/:list', function(req, res) {
+  res.send({
+    msg: 'get lists for user'
+  });
+})
 
-//assign task to user
-// app.post('/:list/assign', task.setUser);
+//gets user based on authID
+//app.get('/user/:authid', user.getUserbyAuthID);
+app.get('/user/:authid', function(req, res) {
+  res.send({
+    msg: 'get user based on authid'
+  });
+})
+
+//get users where email contains a string
+//app.get('/user/email', user.getUserByEmail);
+app.get('/user/email', function(req, res) {
+  res.send({
+    msg: 'get users with registered email'
+  });
+})
 
 
 // listen for requests :)

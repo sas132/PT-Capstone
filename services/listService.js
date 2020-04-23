@@ -5,9 +5,9 @@ const Task = require('../models/task');
 module.exports = {
 
 	//adds a new list
-	newList: function(name) {
+	newList: function(title) {
 		return List.create({
-			name: name
+			title: title
 		})
 	},
 

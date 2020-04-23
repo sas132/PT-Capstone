@@ -2,10 +2,19 @@ let mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let listSchema = mongoose.Schema({
-	name: String,
+	title: String,
+	description: String,
 	owner: [{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
+	}],
+	users: [{
+		type: Schema.Types.ObjectId,
+		ref: 'User'
+	}],
+	tasks: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Task'
 	}]
 })
 

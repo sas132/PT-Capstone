@@ -3,10 +3,9 @@ const listService = require('../services/listService');
 //adds a new list
 const newList = async function(req, res) {
 	try {
-		if(req.body.name) {
-			await listService.newList(req.body.name);
+		if(req.body.title) {
+			await listService.newList(req.body.title);
 		}
-		res.redirect('/list/new'); //could also redirect back home??	
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);
@@ -19,7 +18,6 @@ const addTask = async function(req, res) {
 		if(req.body.listID && req.body.task) {
 			await listService.addTask(req.body.listID, req.body.task);
 		}
-		res.redirect('/list/add');
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);
