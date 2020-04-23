@@ -18,7 +18,11 @@ const addTask = async function(req, res) {
 
 //get tasks from a given list
 const getTasks = async function(req, res) {
+	res.status(200);
+
 	let tasks = await listService.getTasks(req.params.list);
+	console.log(tasks);
+
 	res.send({
 		msg: JSON.stringify(tasks)
 	});
