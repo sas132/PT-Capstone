@@ -47,6 +47,7 @@ app.post('/list/new', list.newList);
 //adds a task to the list
 app.get('/list/add', function (req, res) {
   res.status(200);
+  re.redirect('/');
   //TODO: give page that allows entering task data
 });
 app.post('/list/add', list.addTask);
