@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 let listSchema = mongoose.Schema({
 	title: String,
 	description: String,
-	owner: [{
+	owner: {
 		type: Schema.Types.ObjectId,
 		ref: 'User'
-	}],
+	},
 	users: [{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
