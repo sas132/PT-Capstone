@@ -6,9 +6,7 @@ const newTask = async function(req, res) {
 		if(req.body.task) {
       		task = await taskService.newTask(req.body.task);
 
-			res.send({
-				msg: JSON.stringify(task)
-			});
+			res.send({msg: JSON.stringify(task)});
 		} else {res.send({msg: 'missing task'})};
 	} catch(err) {
 		res.status(500).send({msg: err});

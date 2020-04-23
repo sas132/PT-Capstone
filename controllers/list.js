@@ -4,8 +4,9 @@ const listService = require('../services/listService');
 const newList = async function(req, res) {
 	try {
 		if(req.body.title) {
-			await listService.newList(req.body.title);
+			list = await listService.newList(req.body.title);
 		}
+		res.send({msg: JSON.stringify(list)});
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);
