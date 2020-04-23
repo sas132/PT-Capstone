@@ -21,9 +21,10 @@ const Content = ({ styles, comp, actions }) => {
           }
         });
       })
+      .then(data => data.json())
+      .then(console.log)
       .catch(err => {
         console.warn(err);
-        setUserSent(false);
       })
     }
   }, [isAuthenticated, userSent, getTokenSilently])

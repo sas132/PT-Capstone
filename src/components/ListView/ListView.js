@@ -35,6 +35,20 @@ const ListView = ({ styles }) => {
     newList.description = 'Description...';
     setLists(newLists)
   }
+  
+  const updateListTitle = (listIdx, newTitle) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    list.title = newTitle;
+    setLists(newLists)
+  }
+
+  const updateListDescription = (listIdx, newDescription) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    list.description = newDescription;
+    setLists(newLists)
+  }
 
   const addNewTask = (listIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
@@ -75,17 +89,33 @@ const ListView = ({ styles }) => {
         <Accordion defaultActiveKey="0">
           {lists.map((list, listIdx) => {
             return (
-              <Card key={`${list.title}${listIdx}`}>
+              <Card key={`${list.tasks}${listIdx}`}>
                 <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
                   {list.title}
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={listIdx}>
                   <Card.Body>
+                    Title: 
+                    <Form.Control
+                      size="sm"
+                      type="text"
+                      value={list.title}
+                      onChange={(e) => updateListTitle(listIdx, e.target.value)}
+                    />
+                    <br/>
+                    Description: 
+                    <Form.Control
+                      size="sm"
+                      type="text"
+                      value={list.description}
+                      onChange={(e) => updateListDescription(listIdx, e.target.value)}
+                    />
+                    <br/>
                     <Accordion defaultActiveKey="0">
                       <ul>
                         {list.tasks.map((task, taskIdx) => {
                           return (
-                            <li key={`${task.task}${taskIdx}`}>
+                            <li key={`${task.assignedUser}${taskIdx}`}>
                               <Card key={`${task.task}${taskIdx}`}>
                               <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
                                 {task.task}
