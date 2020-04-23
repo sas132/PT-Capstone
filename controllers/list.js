@@ -11,7 +11,7 @@ const newList = async function(req, res) {
 //add a task to a given list
 const addTask = async function(req, res) {
 	if(req.body.listID && req.body.task) {
-		await listService.addTask(req.params.listID, req.body.task);
+		await listService.addTask(req.body.listID, req.body.task);
 	}
 	res.redirect('/list/add');
 }
