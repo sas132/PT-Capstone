@@ -16,11 +16,14 @@ class App extends Component {
       windowWidth: 0,
       windowHeight: 0,
       dark: false,
-      content: <ListView actions={this.actions}/>
+      content: <ListView actions={this.actions}/>,
+      user: null
     };
 
     this.actions = {
-      setContent: (cont) => this.setContent(cont)
+      setContent: (cont) => this.setContent(cont),
+      setUser: (user) => this.setUser(user),
+      getUser: () => this.getUser()
     }
   }
 
@@ -45,9 +48,18 @@ class App extends Component {
     this.setState({ content });
   }
 
-  render() {
-    const { windowWidth, content } = this.state;
+  setUser(user) {
+    this.setState({ user });
+  }
 
+  getUser() {
+    const { user } = this.state;
+    return user;
+  }
+
+  render() {
+    const { windowWidth, content, user } = this.state;
+    console.log(user)
     const styles = {
       white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
       black: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

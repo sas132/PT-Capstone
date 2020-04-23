@@ -3,12 +3,12 @@ import { useAuth0 } from "../../react-auth0-spa";
 import Welcome from "../Welcome/Welcome";
 import Loading from "../Loading/Loading";
 
-const Content = ({ styles, comp, actions }) => {
+const Content = ({ styles, comp, actions, user }) => {
   const { showSidebar } = styles;
   const { isAuthenticated, getTokenSilently } = useAuth0();
   const [ userSent, setUserSent ] = useState(false);
   const loading = (isAuthenticated === undefined)
-
+  
   useEffect(() => {
     if (isAuthenticated && !userSent) {
       setUserSent(true);
@@ -22,12 +22,12 @@ const Content = ({ styles, comp, actions }) => {
         });
       })
       .then(data => data.json())
-      .then(console.log)
+      .then(user => actions.setUser(user))
       .catch(err => {
         console.warn(err);
       })
     }
-  }, [isAuthenticated, userSent, getTokenSilently])
+  }, [isAuthenticated, userSent, actions, getTokenSilently])
 
   const contentWidth = (styles.windowWidth - (styles.sidebarWidth - 40)) > 1100
     ? 1100
