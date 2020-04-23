@@ -76,6 +76,22 @@ const ListView = ({ styles, actions }) => {
     setLists(newLists)
   }
 
+  const updateTaskName = (listIdx, taskIdx, newTaskName) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    const task = list.tasks[taskIdx];
+    task.task = newTaskName;
+    setLists(newLists)
+  }
+
+  const updateTaskPoints = (listIdx, taskIdx, newTaskPoints) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    const task = list.tasks[taskIdx];
+    task.points = newTaskPoints;
+    setLists(newLists)
+  }
+
   const apiTest = async () => {
     try {
       console.log('hello')
@@ -93,7 +109,7 @@ const ListView = ({ styles, actions }) => {
     }
   }
 
-  let view = <Loading />
+  let view = (<><Loading /><br/></>)
   if (user && user.authId && !loading) {
     view = (
       <>
@@ -125,31 +141,50 @@ const ListView = ({ styles, actions }) => {
                       Description: 
                       <Form.Control
                         size="sm"
-                        type="text"
+                        as="textarea"
+                        rows="3"
                         value={list.description}
                         onChange={(e) => updateListDescription(listIdx, e.target.value)}
                       />
                       <br/>
                       <Accordion defaultActiveKey="0">
-                        <ul>
-                          {list.tasks.map((task, taskIdx) => {
-                            return (
-                              <li key={`${task.assignedUser}${taskIdx}`}>
-                                <Card key={`${task.task}${taskIdx}`}>
-                                <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
-                                  {task.task}
-                                </Accordion.Toggle>
-                                <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
-                                  <Card.Body>
-                                    {task.points}
-                                  </Card.Body>
-                                </Accordion.Collapse>
-                                </Card>
-                              </li>
-                            )
-                          })}
-                        </ul>
+                        Tasks:
+                        {list.tasks.map((task, taskIdx) => {
+                          return (
+                            <Card key={`${task.assignedUser}${taskIdx}`}>
+                              <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
+                                {`${taskIdx + 1}. ${task.task}`}
+                              </Accordion.Toggle>
+                              <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
+                                <Card.Body>
+                                  Title: 
+                                  <Form.Control
+                                    size="sm"
+                                    type="text"
+                                    value={task.task}
+                                    onChange={(e) => updateTaskName(listIdx, taskIdx, e.target.value)}
+                                  />
+                                  <br/>
+                                  <span>Points: <small>(Integers only)</small></span>
+                                  <Form.Control
+                                    size="sm"
+                                    type="text"
+                                    value={task.points}
+                                    onChange={(e) => {
+                                      let newPoints = parseInt(e.target.value);
+                                      if (isNaN(newPoints)) {
+                                        newPoints = 0;
+                                      }
+                                      updateTaskPoints(listIdx, taskIdx, newPoints)
+                                    }}
+                                  />
+                                </Card.Body>
+                              </Accordion.Collapse>
+                            </Card>
+                          )
+                        })}
                       </Accordion>
+                      <br/>
                       <Button
                         variant="secondary"
                         block
