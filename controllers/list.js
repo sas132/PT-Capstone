@@ -12,7 +12,7 @@ const newList = async function(req, res) {
 	}
 }
 
-const update = async function(req, res) {
+const updateList = async function(req, res) {
 	try {
 		if(req.params.id && req.body) {
 			await listService.update(req.params.id, req.body);
@@ -85,7 +85,7 @@ const clearList = async function(req, res) {
 
 module.exports = {
 	newList: newList,
-	update: update
+	updateList: updateList
 //	removeTask: removeTask,
 //	clearList: clearList
 }

@@ -12,7 +12,7 @@ module.exports = {
 	},
 
 	//updates the given list using the desired params
-	update: function(id, change) {
+	updateList: function(id, change) {
 		return List.findByIdAndUpdate(
 			id,			//doc to update
 			change,		//the change to implement
