@@ -29,9 +29,7 @@ const addTask = async function(req, res) {
 //get tasks from a given list
 const getTasks = async function(req, res) {
 	try {
-		res.status(200);
-
-		let tasks = await listService.getTasks(req.params.list);
+		let tasks = await listService.getTasks(req.body.list);
 		console.log(tasks);
 
 		res.send({
