@@ -18,6 +18,12 @@ const Profile = () => {
       <br/>
       <Container>
         <Row>
+          <Col>
+            <h4 className="text-center">Your Profile</h4>
+          </Col>
+        </Row>
+        <br/>
+        <Row>
           <Col xs="3" sm="3" md="2">
             <Image src={user.picture} roundedCircle={true} fluid={true} alt="Profile" />
           </Col>
