@@ -12,6 +12,18 @@ const newList = async function(req, res) {
 	}
 }
 
+const update = async function(req, res) {
+	try {
+		if(req.params.id && req.body) {
+			await listService.update(req.params.id, req.body);
+		}
+	} catch(err) {
+		res.status(500).send({msg: err});
+		console.warn(err);
+	}
+}
+
+/*TO BE REPLACED
 //add a task to a given list
 const addTask = async function(req, res) {
 	try {
@@ -23,7 +35,9 @@ const addTask = async function(req, res) {
 		console.warn(err);
 	}
 }
+*/
 
+/* NO LONGER NEEDED WITH NEW SCHEMA
 //get tasks from a given list
 const getTasks = async function(req, res) {
 	try {
@@ -50,7 +64,8 @@ const setUser = async function(req, res) {
 		console.warn(err);
 	}
 }
-
+*/
+s
 /*
 //removes a task from a list
 	//if final task, delete list??
@@ -69,10 +84,8 @@ const clearList = async function(req, res) {
 */
 
 module.exports = {
-	addTask: addTask,
-	getTasks: getTasks,
-	setUser: setUser,
-	newList: newList
+	newList: newList,
+	update: update
 //	removeTask: removeTask,
 //	clearList: clearList
 }

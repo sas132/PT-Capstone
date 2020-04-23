@@ -11,6 +11,20 @@ module.exports = {
 		})
 	},
 
+	//updates the given list using the desired params
+	update: function(id, change) {
+		return List.findByIdAndUpdate(
+			id,			//doc to update
+			change,		//the change to implement
+			{new: true},//return updated doc
+			(err, todo) => {	//error handling
+				if (err) return res.status(500).send(err);
+				return res.send(todo);
+			}
+		)
+	}
+
+	/*NO LONGER NEEDED
 	//adds task to collection, links using list _id
 	addTask: function(list, task) {
 		return Task.create({
@@ -28,6 +42,8 @@ module.exports = {
 	setUser: function(taskID, userID) {
 		return List.findByIdAndUpdate( taskID, {$set: {assignedUser: userID}}, {new: true}).exec();
 	},
+
+	*/
 
 	//not AS important
 	/*
