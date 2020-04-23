@@ -71,7 +71,10 @@ app.post('/list', list.getTasks);
 app.post('/task/new', task.newTask);
 
 //update list by id
-app.post('/list/:id', list.updateList);
+//app.post('/list/:id', list.updateList);
+app.put('/list/:id', function(req, res) {
+  res.send({msg: 'update list'});
+});
 
 //update task by id
 //app.put('/task', task.update);
