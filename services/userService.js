@@ -17,11 +17,11 @@ module.exports = {
   },
 
   getUserByAuth: async function(authid) {
-    const user = await User.find(
+    let user = await User.find(
       {'authId': { $eq: authid } }
     ).exec();
-    console.log(user);
-    return JSON.stringify(user);
+    user = user[0]
+    return user;
   },
 
   //get all users with an email address

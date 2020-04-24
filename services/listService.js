@@ -7,7 +7,7 @@ module.exports = {
 
 	//adds a new list
 	newList: async function(user) {
-		console.log(user.id)
+		console.log('list', user)
 		const newList = await List.create({
 			title: 'New List',
 			description: 'Description...',
@@ -18,6 +18,7 @@ module.exports = {
 	},
 
 	getLists: async function(user) {
+		console.log(user)
 		let lists = await List.find(
       { $or: [
         {'owner': { $exists: true, $eq:user._id }},
