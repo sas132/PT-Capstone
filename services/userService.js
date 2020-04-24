@@ -20,8 +20,8 @@ module.exports = {
     const user = await User.find(
       {'authId': { $eq: authid } }
     ).exec();
-    console.log('byAuth', user)
-    return user;
+    console.log(user);
+    return JSON.stringify(user);
   },
 
   //get all users with an email address
