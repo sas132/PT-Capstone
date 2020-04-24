@@ -45,34 +45,12 @@ app.get('/list/new', function(req, res) {
 });
 app.post('/list/new', list.newList);
 
-/* TO BE REPLACED WITH list.update
-//adds a task to the list
-app.get('/list/add', function (req, res) {
-  res.send({
-    msg: "add task to a list"
-  });
-});
-app.post('/list/add', list.addTask);
-
-
-//gets all tasks in a list
-app.get('/list', function (req, res) {
-  res.status(200);
-  res.send({
-    msg: "get List"
-  });
-  //allows user to select a task?
-  //or should this just run for all lists and display all info in one go?
-});
-app.post('/list', list.getTasks);
-*/
-
 //create new task with no assigned user, return created task
 app.post('/task/new', task.newTask);
 
 //update list by id
 //app.post('/list/:id', list.updateList);
-app.put('/list/:id', function(req, res) {
+app.put('/list/update', function(req, res) {
   res.send({msg: 'update list'});
 });
 
@@ -90,7 +68,7 @@ app.get('/user/email', user.getUsersByEmail);
 
 //gets all lists for a user
 //app.get('/user/lists', user.getLists);
-app.get('/userList/:list', function(req, res) {
+app.get('/userList', function(req, res) {
   res.send({
     msg: 'get lists for user'
   });
@@ -98,7 +76,7 @@ app.get('/userList/:list', function(req, res) {
 
 //gets user based on authID
 //app.get('/user/:authid', user.getUserbyAuthID);
-app.get('/userAuth/:authid', function(req, res) {
+app.get('/userAuth', function(req, res) {
   res.send({
     msg: 'get user based on authid'
   });
