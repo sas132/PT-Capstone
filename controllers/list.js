@@ -19,7 +19,7 @@ const updateList = async function(req, res) {
 			list = await listService.updateList(req.body.id, req.body.change);
 			res.send({msg: req.body.id + '\n' + req.body.change});
 		
-			res.send({msg: JSON.stringify(list)});
+			//res.send({msg: JSON.stringify(list)});
 		}
 	} catch(err) {
 		res.status(500).send({msg: err});
