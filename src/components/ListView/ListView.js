@@ -11,7 +11,8 @@ import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Loading from '../Loading/Loading'
+import Loading from '../Loading/Loading';
+import UserSelector from '../UserSelector/UserSelector';
 
 const ListView = ({ styles, actions }) => {
   const { getTokenSilently } = useAuth0();
@@ -62,7 +63,7 @@ const ListView = ({ styles, actions }) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const newList = JSON.parse(JSON.stringify(listTemplate));
     newLists.push(newList);
-    newList.owner = actions.getUser()._id;
+    newList.owner = actions.getUser();
     newList.title = 'New List';
     newList.description = 'Description...';
     setLists(newLists)
@@ -121,11 +122,35 @@ const ListView = ({ styles, actions }) => {
     setLists(newLists)
   }
 
+  const updateTaskUser = (listIdx, taskIdx, newUser) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    const task = list.tasks[taskIdx];
+    task.assignedUser = newUser
+    setLists(newLists)
+  }
+
   const deleteTask = (listIdx, taskIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
     list.tasks.splice(taskIdx, 1);
     setLists(newLists)
+  }
+
+  const findUsers = async (input) => {
+    try {
+      const token = await getTokenSilently()
+      let response = await fetch(`/user/email/${input}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const msg = await response.json()
+      return msg.msg
+    } catch(err) {
+      console.warn(err)
+    }
   }
   
   const apiTest = async () => {
@@ -174,7 +199,7 @@ const ListView = ({ styles, actions }) => {
         </Accordion.Toggle>
         <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
           <Card.Body>
-            Title: 
+            Task: 
             <Form.Control
               size="sm"
               type="text"
@@ -195,6 +220,43 @@ const ListView = ({ styles, actions }) => {
                 updateTaskPoints(listIdx, taskIdx, newPoints)
               }}
             />
+            <br/>
+            <span>Assigned User: <small>(Click to change)</small></span>
+            <Button
+              block
+              size="sm"
+              variant="outline-info"
+              onClick={() => {
+                let tempUser = null;
+                const setTempUser = (newTempUser) => {
+                  tempUser = newTempUser;
+                }
+                setModalData({
+                  title: 'Delete Task Confirmation',
+                  body: (
+                    <UserSelector 
+                      findUser={(input) => findUsers(input)}
+                      setAssignedUser={(newUser) => setTempUser(newUser)}
+                    />
+                  ),
+                  footer: (
+                    <>
+                      <Button variant="primary" onClick={
+                        () => {
+                          updateTaskUser(listIdx, taskIdx, tempUser)
+                          handleClose();
+                        }
+                      }>
+                        Accept
+                      </Button>
+                    </>
+                  )
+                })
+                handleShow(listIdx)
+              }}
+            >
+              {task.assignedUser.email || 'Assign New User'}
+            </Button>
             <br/>
             <Button
               className="float-right"
@@ -231,7 +293,7 @@ const ListView = ({ styles, actions }) => {
   })
 
   const listsRender = () => lists
-    .filter((list) => list.owner === user._id)
+    .filter((list) => list.owner._id === user._id)
     .map((list, listIdx) => {
     return (
       <Card key={`${list.tasks}${listIdx}`}>

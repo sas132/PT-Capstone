@@ -18,7 +18,12 @@ module.exports = {
 
   //get all users with an email address
   getUsersByEmail: async function(input) {
-    const users = await User.find({'email': {$regex : `.*${input}.*`}}).exec();
+    const users = await User.find(
+      { $or: [
+        {'name': {$regex : `.*${input}.*`}},
+        {'email': {$regex : `.*${input}.*`}}
+      ] }
+    ).exec();
     console.log(users)
     return users;
   }
