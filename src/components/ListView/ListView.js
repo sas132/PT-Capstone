@@ -323,9 +323,13 @@ const ListView = ({ styles, actions }) => {
     if (user !== null && lists == null) {
       apiGetLists()
       .then((lists) => {
-        lists.forEach(list => {
+        lists.forEach((list, lidx) => {
+          list.listIdx = lidx;
+          list.tasks.forEach((task, tidx) => {
+            task.taskIdx = tidx;
+          })
           if (list.owner === user._id) list.owner = user;
-        })
+        });
         console.log(lists)
         setLists(lists.length ? lists : []);
         setLoading(false);
@@ -335,7 +339,8 @@ const ListView = ({ styles, actions }) => {
 
   const tasksRender = (list, listIdx) => list.tasks
   .filter(task => task.assignedUser && task.assignedUser._id === user._id)
-  .map((task, taskIdx) => {
+  .map((task) => {
+    const { taskIdx } = task;
     return (
       <Card key={`${task.assignedUser}${taskIdx}`}>
         <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
@@ -370,7 +375,6 @@ const ListView = ({ styles, actions }) => {
               size="sm"
               type="text"
               value={task.task}
-              onChange={(e) => updateTaskName(listIdx, taskIdx, e.target.value)}
             />
             <br/>
             <span>Points: <small>(Integers only)</small></span>
@@ -379,13 +383,6 @@ const ListView = ({ styles, actions }) => {
               size="sm"
               type="text"
               value={task.points}
-              onChange={(e) => {
-                let newPoints = parseInt(e.target.value);
-                if (isNaN(newPoints)) {
-                  newPoints = 0;
-                }
-                updateTaskPoints(listIdx, taskIdx, newPoints)
-              }}
             />
             <br/>
             <span>Assigned User: </span>
@@ -433,7 +430,8 @@ const ListView = ({ styles, actions }) => {
     )
   })
 
-  const tasksOwnerRender = (list, listIdx) => list.tasks.map((task, taskIdx) => {
+  const tasksOwnerRender = (list, listIdx) => list.tasks.map((task) => {
+    const { taskIdx } = task;
     return (
       <Card key={`${task.assignedUser}${taskIdx}`}>
         <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
@@ -560,102 +558,103 @@ const ListView = ({ styles, actions }) => {
     .filter((list) => owner 
       ? list.owner._id === user._id
       : list.tasks.some(task => task.assignedUser && task.assignedUser._id === user._id))
-    .map((list, listIdx) => {
-    return (
-      <Card key={`${list.tasks}${listIdx}`}>
-        <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
-        <span>
-          <span 
-            className="float-left"
-            style={{ 
-              wordBreak: 'break-word',
-              overflow: 'hidden'
-            }}>
-              {list.title}
-            </span>
-          <span 
-            className="float-right"
-            style={{ 
-              marginLeft: '5px'
-            }}
-          >
-            {`Tasks Completed: ${
-              owner
-              ? list.tasks.filter(task => task.completed).length
-              : list.tasks.filter(task => task.assignedUser && task.assignedUser._id === user._id && task.completed).length
-            } / ${
-              owner
-              ? list.tasks.length
-              : list.tasks.filter(task => task.assignedUser && task.assignedUser._id === user._id).length
-            }`}
-          </span>
-        </span>
-        </Accordion.Toggle>
-        <Accordion.Collapse eventKey={listIdx}>
-          <Card.Body>
-            Title: 
-            <Form.Control
-              disabled={!owner}
-              size="sm"
-              type="text"
-              value={list.title}
-              onChange={(e) => updateListTitle(listIdx, e.target.value)}
-            />
-            <br/>
-            Description: 
-            <Form.Control
-            disabled={!owner}
-              size="sm"
-              as="textarea"
-              rows="3"
-              value={list.description}
-              onChange={(e) => updateListDescription(listIdx, e.target.value)}
-            />
-            <br/>
-            <Accordion defaultActiveKey="0">
-              Tasks:
-              {owner ? tasksOwnerRender(list, listIdx) : tasksRender(list, listIdx)}
-            </Accordion>
-            <br/>
-            {owner ? (<Button
-              variant="secondary"
-              block
-              onClick={() => addNewTask(listIdx)}
-            >
-              <span style={{fontSize: 20}} >+</span> New Task
-            </Button>) : null}
-            {owner ? (<Button
-              disabled={!owner}
-              size="sm"
-              variant="outline-danger"
-              block
-              onClick={() => {
-                setModalData({
-                  title: 'Delete List Confirmation',
-                  body: 'Are you sure you want to delete this list?',
-                  footer: (
-                    <>
-                      <Button variant="secondary" onClick={handleClose}>
-                        Cancel
-                      </Button>
-                      <Button variant="danger" onClick={() => {
-                        deleteList(listIdx);
-                        handleClose();
-                      }}>
-                        Delete
-                      </Button>
-                    </>
-                  )
-                })
-                handleShow(listIdx)
+    .map((list) => {
+      const { listIdx } = list;
+      return (
+        <Card key={`${list.tasks}${listIdx}`}>
+          <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
+          <span>
+            <span 
+              className="float-left"
+              style={{ 
+                wordBreak: 'break-word',
+                overflow: 'hidden'
+              }}>
+                {list.title}
+              </span>
+            <span 
+              className="float-right"
+              style={{ 
+                marginLeft: '5px'
               }}
             >
-              {'🗑️ Delete List'}
-            </Button>) : null}
-          </Card.Body>
-        </Accordion.Collapse>
-      </Card>
-    )
+              {`Tasks Completed: ${
+                owner
+                ? list.tasks.filter(task => task.completed).length
+                : list.tasks.filter(task => task.assignedUser && task.assignedUser._id === user._id && task.completed).length
+              } / ${
+                owner
+                ? list.tasks.length
+                : list.tasks.filter(task => task.assignedUser && task.assignedUser._id === user._id).length
+              }`}
+            </span>
+          </span>
+          </Accordion.Toggle>
+          <Accordion.Collapse eventKey={listIdx}>
+            <Card.Body>
+              Title: 
+              <Form.Control
+                disabled={!owner}
+                size="sm"
+                type="text"
+                value={list.title}
+                onChange={(e) => updateListTitle(listIdx, e.target.value)}
+              />
+              <br/>
+              Description: 
+              <Form.Control
+              disabled={!owner}
+                size="sm"
+                as="textarea"
+                rows="3"
+                value={list.description}
+                onChange={(e) => updateListDescription(listIdx, e.target.value)}
+              />
+              <br/>
+              <Accordion defaultActiveKey="0">
+                Tasks:
+                {owner ? tasksOwnerRender(list, listIdx) : tasksRender(list, listIdx)}
+              </Accordion>
+              <br/>
+              {owner ? (<Button
+                variant="secondary"
+                block
+                onClick={() => addNewTask(listIdx)}
+              >
+                <span style={{fontSize: 20}} >+</span> New Task
+              </Button>) : null}
+              {owner ? (<Button
+                disabled={!owner}
+                size="sm"
+                variant="outline-danger"
+                block
+                onClick={() => {
+                  setModalData({
+                    title: 'Delete List Confirmation',
+                    body: 'Are you sure you want to delete this list?',
+                    footer: (
+                      <>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Cancel
+                        </Button>
+                        <Button variant="danger" onClick={() => {
+                          deleteList(listIdx);
+                          handleClose();
+                        }}>
+                          Delete
+                        </Button>
+                      </>
+                    )
+                  })
+                  handleShow(listIdx)
+                }}
+              >
+                {'🗑️ Delete List'}
+              </Button>) : null}
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      )
   })
 
   let view = (<><Loading /><br/></>)
