@@ -84,23 +84,23 @@ app.put('/task', function(req, res) {
   });
 })
 
-//gets user based on authID
-//app.get('/user/:authid', user.getUserbyAuthID);
-app.get('/user/:authid', function(req, res) {
-  res.send({
-    msg: 'get user based on authid'
-  });
-})
-
 //get users where email contains a string
 //app.get('/user/email', user.getUserByEmail);
 app.get('/user/email', user.getUsersByEmail);
 
 //gets all lists for a user
 //app.get('/user/lists', user.getLists);
-app.get('/user/:list', function(req, res) {
+app.get('/userList/:list', function(req, res) {
   res.send({
     msg: 'get lists for user'
+  });
+})
+
+//gets user based on authID
+//app.get('/user/:authid', user.getUserbyAuthID);
+app.get('/userAuth/:authid', function(req, res) {
+  res.send({
+    msg: 'get user based on authid'
   });
 })
 
