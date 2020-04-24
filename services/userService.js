@@ -18,8 +18,9 @@ module.exports = {
 
   getUserByAuth: async function(authid) {
     const user = await User.find(
-      {'authId': authid}
+      {'authId': { $eq: authid } }
     ).exec();
+    console.log('byAuth', user)
     return user;
   },
 

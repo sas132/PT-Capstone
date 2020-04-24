@@ -7,11 +7,14 @@ module.exports = {
 
 	//adds a new list
 	newList: async function(user) {
-		return await List.create({
+		console.log(user.id)
+		const newList = await List.create({
 			title: 'New List',
 			description: 'Description...',
 			owner: user._id
-		})
+		});
+		console.log(newList);
+		return newList;
 	},
 
 	getLists: async function(user) {

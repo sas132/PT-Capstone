@@ -23,7 +23,7 @@ const Content = ({ styles, comp, actions, user }) => {
         });
       })
       .then(data => data.json())
-      .then(({ msg: user }) => actions.setUser(user))
+      .then(({ msg: user }) => {console.log(user);actions.setUser(user)})
       .catch(err => console.warn(err))
     }
   }, [isAuthenticated, userSent, actions, getTokenSilently])
