@@ -15,8 +15,8 @@ const addList = async function(req, res) {
 
 const add = async function(req, res) {
   try {
-    await userService.addUser(req.userData);
-    res.status(200).send(req.userData);
+    const result = await userService.addUser(req.userData);
+    res.status(200).send(result);
   } catch(err) {
     res.status(500).send({msg: err});
     console.warn(err);

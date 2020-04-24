@@ -10,6 +10,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Loading from '../Loading/Loading'
 
 const ListView = ({ styles, actions }) => {
@@ -17,6 +18,15 @@ const ListView = ({ styles, actions }) => {
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState(actions.getUser())
+  const [show, setShow] = useState(false);
+  const [modalData, setModalData] = useState({
+    title: '',
+    body: '',
+    footer: null
+  })
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     const timerGetUser = () => {
@@ -50,7 +60,7 @@ const ListView = ({ styles, actions }) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const newList = JSON.parse(JSON.stringify(listTemplate));
     newLists.push(newList);
-    newList.owner = actions.getUser().authId;
+    newList.owner = actions.getUser()._id;
     newList.title = 'New List';
     newList.description = 'Description...';
     setLists(newLists)
@@ -70,6 +80,12 @@ const ListView = ({ styles, actions }) => {
     setLists(newLists)
   }
 
+  const deleteList = (listIdx) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    newLists.splice(listIdx, 1);
+    setLists(newLists)
+  }
+  
   const addNewTask = (listIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
@@ -78,7 +94,7 @@ const ListView = ({ styles, actions }) => {
     list.tasks.push(newTask);
     setLists(newLists)
   }
-
+  
   const updateTaskName = (listIdx, taskIdx, newTaskName) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
@@ -86,7 +102,7 @@ const ListView = ({ styles, actions }) => {
     task.task = newTaskName;
     setLists(newLists)
   }
-
+  
   const updateTaskPoints = (listIdx, taskIdx, newTaskPoints) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
@@ -94,7 +110,7 @@ const ListView = ({ styles, actions }) => {
     task.points = newTaskPoints;
     setLists(newLists)
   }
-
+  
   const updateTaskCompleted = (listIdx, taskIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
@@ -103,6 +119,13 @@ const ListView = ({ styles, actions }) => {
     setLists(newLists)
   }
 
+  const deleteTask = (listIdx, taskIdx) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    const list = newLists[listIdx];
+    list.tasks.splice(taskIdx, 1);
+    setLists(newLists)
+  }
+  
   const apiTest = async () => {
     try {
       console.log('hello')
@@ -120,7 +143,7 @@ const ListView = ({ styles, actions }) => {
     }
   }
 
-  const tasksRender = (list, listIdx) => list.tasks.map((task, taskIdx) => {
+  const tasksOwnerRender = (list, listIdx) => list.tasks.map((task, taskIdx) => {
     return (
       <Card key={`${task.assignedUser}${taskIdx}`}>
         <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
@@ -139,7 +162,7 @@ const ListView = ({ styles, actions }) => {
               <span style={{ marginTop: '2px', paddingRight: '5px'}}>Completed: </span>
               <Button
                 size="sm"
-                variant={`outline-${task.completed ? 'success' : 'danger'}`}
+                variant={`outline-${task.completed ? 'success' : 'dark'}`}
                 onClick={(e) => {e.stopPropagation(); updateTaskCompleted(listIdx, taskIdx)}}
               >
                 {task.completed ? '✔':'❌'}
@@ -170,13 +193,44 @@ const ListView = ({ styles, actions }) => {
                 updateTaskPoints(listIdx, taskIdx, newPoints)
               }}
             />
+            <br/>
+            <Button
+              className="float-right"
+              size="sm"
+              variant="outline-danger"
+              onClick={() => {
+                setModalData({
+                  title: 'Delete Task Confirmation',
+                  body: 'Are you sure you want to delete this task?',
+                  footer: (
+                    <>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                      </Button>
+                      <Button variant="danger" onClick={() => {
+                        deleteTask(listIdx, taskIdx);
+                        handleClose();
+                      }}>
+                        Delete
+                      </Button>
+                    </>
+                  )
+                })
+                handleShow(listIdx)
+              }}
+            >
+              {'🗑️'}
+            </Button>
+            <br/>
           </Card.Body>
         </Accordion.Collapse>
       </Card>
     )
   })
 
-  const listsRender = () => lists.map((list, listIdx) => {
+  const listsRender = () => lists
+    .filter((list) => list.owner === user._id)
+    .map((list, listIdx) => {
     return (
       <Card key={`${list.tasks}${listIdx}`}>
         <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
@@ -224,7 +278,7 @@ const ListView = ({ styles, actions }) => {
             <br/>
             <Accordion defaultActiveKey="0">
               Tasks:
-              {tasksRender(list, listIdx)}
+              {tasksOwnerRender(list, listIdx)}
             </Accordion>
             <br/>
             <Button
@@ -233,6 +287,33 @@ const ListView = ({ styles, actions }) => {
               onClick={() => addNewTask(listIdx)}
             >
               <span style={{fontSize: 20}} >+</span> New Task
+            </Button>
+            <Button
+              size="sm"
+              variant="outline-danger"
+              block
+              onClick={() => {
+                setModalData({
+                  title: 'Delete List Confirmation',
+                  body: 'Are you sure you want to delete this list?',
+                  footer: (
+                    <>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                      </Button>
+                      <Button variant="danger" onClick={() => {
+                        deleteList(listIdx);
+                        handleClose();
+                      }}>
+                        Delete
+                      </Button>
+                    </>
+                  )
+                })
+                handleShow(listIdx)
+              }}
+            >
+              {'🗑️ Delete List'}
             </Button>
           </Card.Body>
         </Accordion.Collapse>
@@ -257,8 +338,9 @@ const ListView = ({ styles, actions }) => {
               <Container>
                 <br/>
                 <Row>
-                  <Col>
-                    <h4 className="text-center">Your Lists</h4>
+                  <Col className="text-center">
+                    <h4>Your Lists</h4>
+                    <p>Lists that you own.</p>
                   </Col>
                 </Row>
                 <br/>
@@ -284,8 +366,9 @@ const ListView = ({ styles, actions }) => {
               <Container>
                 <br/>
                 <Row>
-                  <Col>
-                    <h4 className="text-center">Your Tasks</h4>
+                  <Col className="text-center">
+                    <h4>Your Tasks</h4>
+                    <p>Tasks assigned to you.</p>
                   </Col>
                 </Row>
                 <br/>
@@ -300,7 +383,20 @@ const ListView = ({ styles, actions }) => {
     );
   }
 
-  return view;
+  return (
+    <>
+      <Modal centered show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalData.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalData.body}</Modal.Body>
+        <Modal.Footer>
+          {modalData.footer}
+        </Modal.Footer>
+      </Modal>
+      {view}
+    </>
+  );
 };
 
 export default ListView;

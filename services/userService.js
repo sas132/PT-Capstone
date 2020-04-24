@@ -6,11 +6,12 @@ module.exports = {
 	//add new users to db
 	addUser: async function(userData) {
     // check if user already exists
-    const test = await User.find( { auth_id: { $eq: userData.auth_id } } ).exec()
-    let result = false;
-    if (test.length === 0) {
+    let result = await User.find( { auth_id: { $eq: userData.auth_id } } ).exec()
+    if (result.length === 0) {
       // add user if user doens't exist
       result = await User.create(userData)
+    } else {
+      result = result[0];
     }
     return result;
   }
