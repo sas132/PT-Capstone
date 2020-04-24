@@ -49,7 +49,7 @@ app.post('/list/new', list.newList);
 app.post('/task/new', task.newTask);
 
 //update list by id
-app.put('/list/update', list.updateList);
+app.post('/list/update', list.updateList);
 
 //update task by id
 //app.put('/task', task.update);
