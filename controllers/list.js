@@ -15,10 +15,12 @@ const newList = async function(req, res) {
 
 const updateList = async function(req, res) {
 	try {
-		if(req.params.id && req.body) {
-			list = await listService.updateList(req.params.id, req.body);
+		if(req.body.id && req.body.change) {
+			list = await listService.updateList(req.body.id, req.body.change);
+			res.send({msg: req.body.id + '\n' + req.body.change});
+		
+			//res.send({msg: JSON.stringify(list)});
 		}
-		res.send({msg: JSON.stringify(list)});
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);

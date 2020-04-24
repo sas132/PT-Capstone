@@ -45,36 +45,11 @@ app.get('/list/new', function(req, res) {
 });
 app.post('/list/new', list.newList);
 
-/* TO BE REPLACED WITH list.update
-//adds a task to the list
-app.get('/list/add', function (req, res) {
-  res.send({
-    msg: "add task to a list"
-  });
-});
-app.post('/list/add', list.addTask);
-
-
-//gets all tasks in a list
-app.get('/list', function (req, res) {
-  res.status(200);
-  res.send({
-    msg: "get List"
-  });
-  //allows user to select a task?
-  //or should this just run for all lists and display all info in one go?
-});
-app.post('/list', list.getTasks);
-*/
-
 //create new task with no assigned user, return created task
 app.post('/task/new', task.newTask);
 
 //update list by id
-//app.post('/list/:id', list.updateList);
-app.put('/list/:id', function(req, res) {
-  res.send({msg: 'update list'});
-});
+app.post('/list/update', list.updateList);
 
 //update task by id
 //app.put('/task', task.update);
@@ -84,9 +59,13 @@ app.put('/task', function(req, res) {
   });
 })
 
+//get users where email contains a string
+//app.get('/user/email', user.getUserByEmail);
+app.get('/user/email', user.getUsersByEmail);
+
 //gets all lists for a user
 //app.get('/user/lists', user.getLists);
-app.get('/user/:list', function(req, res) {
+app.get('/userList', function(req, res) {
   res.send({
     msg: 'get lists for user'
   });
@@ -94,20 +73,11 @@ app.get('/user/:list', function(req, res) {
 
 //gets user based on authID
 //app.get('/user/:authid', user.getUserbyAuthID);
-app.get('/user/:authid', function(req, res) {
+app.get('/userAuth', function(req, res) {
   res.send({
     msg: 'get user based on authid'
   });
 })
-
-//get users where email contains a string
-//app.get('/user/email', user.getUserByEmail);
-app.get('/user/email', function(req, res) {
-  res.send({
-    msg: 'get users with registered email'
-  });
-})
-
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT || 3000, function () {

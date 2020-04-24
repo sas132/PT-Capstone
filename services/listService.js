@@ -16,11 +16,7 @@ module.exports = {
 		return List.findByIdAndUpdate(
 			id,			//doc to update
 			change,		//the change to implement
-			{new: true},//return updated doc
-			(err, todo) => {	//error handling
-				if (err) return res.status(500).send(err);
-				return res.send(todo);
-			}
+			{new: true}//return updated doc
 		)
 	}
 
