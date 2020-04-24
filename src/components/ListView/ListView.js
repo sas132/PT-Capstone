@@ -5,6 +5,9 @@ import { useAuth0 } from "../../react-auth0-spa";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Loading from '../Loading/Loading'
@@ -117,121 +120,183 @@ const ListView = ({ styles, actions }) => {
     }
   }
 
+  const tasksRender = (list, listIdx) => list.tasks.map((task, taskIdx) => {
+    return (
+      <Card key={`${task.assignedUser}${taskIdx}`}>
+        <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
+          <span>
+            <span
+              className="float-left"
+              style={{ 
+                wordBreak: 'break-all',
+                marginTop: '2px',
+                overflow: 'hidden'
+              }}
+            >
+              {`${taskIdx + 1}. ${task.task}`}
+            </span>
+            <div className="float-right" >
+              <span style={{ marginTop: '2px', paddingRight: '5px'}}>Completed: </span>
+              <Button
+                size="sm"
+                variant={`outline-${task.completed ? 'success' : 'danger'}`}
+                onClick={(e) => {e.stopPropagation(); updateTaskCompleted(listIdx, taskIdx)}}
+              >
+                {task.completed ? '✔':'❌'}
+              </Button>
+            </div>
+          </span>
+        </Accordion.Toggle>
+        <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
+          <Card.Body>
+            Title: 
+            <Form.Control
+              size="sm"
+              type="text"
+              value={task.task}
+              onChange={(e) => updateTaskName(listIdx, taskIdx, e.target.value)}
+            />
+            <br/>
+            <span>Points: <small>(Integers only)</small></span>
+            <Form.Control
+              size="sm"
+              type="text"
+              value={task.points}
+              onChange={(e) => {
+                let newPoints = parseInt(e.target.value);
+                if (isNaN(newPoints)) {
+                  newPoints = 0;
+                }
+                updateTaskPoints(listIdx, taskIdx, newPoints)
+              }}
+            />
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    )
+  })
+
+  const listsRender = () => lists.map((list, listIdx) => {
+    return (
+      <Card key={`${list.tasks}${listIdx}`}>
+        <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
+        <span>
+          <span 
+            className="float-left"
+            style={{ 
+              wordBreak: 'break-word',
+              overflow: 'hidden'
+            }}>
+              {list.title}
+            </span>
+          <span 
+            className="float-right"
+            style={{ 
+              marginLeft: '5px'
+            }}
+          >
+            {`Tasks Completed: ${
+              list.tasks.filter(task => task.completed).length
+            } / ${
+              list.tasks.length
+            }`}
+          </span>
+        </span>
+        </Accordion.Toggle>
+        <Accordion.Collapse eventKey={listIdx}>
+          <Card.Body>
+            Title: 
+            <Form.Control
+              size="sm"
+              type="text"
+              value={list.title}
+              onChange={(e) => updateListTitle(listIdx, e.target.value)}
+            />
+            <br/>
+            Description: 
+            <Form.Control
+              size="sm"
+              as="textarea"
+              rows="3"
+              value={list.description}
+              onChange={(e) => updateListDescription(listIdx, e.target.value)}
+            />
+            <br/>
+            <Accordion defaultActiveKey="0">
+              Tasks:
+              {tasksRender(list, listIdx)}
+            </Accordion>
+            <br/>
+            <Button
+              variant="secondary"
+              block
+              onClick={() => addNewTask(listIdx)}
+            >
+              <span style={{fontSize: 20}} >+</span> New Task
+            </Button>
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    )
+  })
+
   let view = (<><Loading /><br/></>)
   if (user && user.authId && !loading) {
     view = (
-      <>
-        <Container>
-          <br/>
-          <Row>
-            <Col>
-              <h4 className="text-center">Your Lists</h4>
-            </Col>
-          </Row>
-          <br/>
-          <Accordion defaultActiveKey="0">
-            {lists.map((list, listIdx) => {
-              return (
-                <Card key={`${list.tasks}${listIdx}`}>
-                  <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
-                    {list.title}
-                  </Accordion.Toggle>
-                  <Accordion.Collapse eventKey={listIdx}>
-                    <Card.Body>
-                      Title: 
-                      <Form.Control
-                        size="sm"
-                        type="text"
-                        value={list.title}
-                        onChange={(e) => updateListTitle(listIdx, e.target.value)}
-                      />
-                      <br/>
-                      Description: 
-                      <Form.Control
-                        size="sm"
-                        as="textarea"
-                        rows="3"
-                        value={list.description}
-                        onChange={(e) => updateListDescription(listIdx, e.target.value)}
-                      />
-                      <br/>
-                      <Accordion defaultActiveKey="0">
-                        Tasks:
-                        {list.tasks.map((task, taskIdx) => {
-                          return (
-                            <Card key={`${task.assignedUser}${taskIdx}`}>
-                              <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
-                                <span>
-                                  <span style={{marginTop: '2px', overflow: 'hidden'}}>{`${taskIdx + 1}. ${task.task}`}</span>
-                                  <Button
-                                    size="sm"
-                                    className="float-right"
-                                    variant={`outline-${task.completed ? 'success' : 'danger'}`}
-                                    onClick={(e) => {e.stopPropagation(); updateTaskCompleted(listIdx, taskIdx)}}
-                                  >
-                                    {task.completed ? '✔':'❌'}
-                                  </Button>
-                                  <span className="float-right" style={{ marginTop: '2px', paddingRight: '5px'}}>Completed: </span>
-                                </span>
-                              </Accordion.Toggle>
-                              <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
-                                <Card.Body>
-                                  Title: 
-                                  <Form.Control
-                                    size="sm"
-                                    type="text"
-                                    value={task.task}
-                                    onChange={(e) => updateTaskName(listIdx, taskIdx, e.target.value)}
-                                  />
-                                  <br/>
-                                  <span>Points: <small>(Integers only)</small></span>
-                                  <Form.Control
-                                    size="sm"
-                                    type="text"
-                                    value={task.points}
-                                    onChange={(e) => {
-                                      let newPoints = parseInt(e.target.value);
-                                      if (isNaN(newPoints)) {
-                                        newPoints = 0;
-                                      }
-                                      updateTaskPoints(listIdx, taskIdx, newPoints)
-                                    }}
-                                  />
-                                </Card.Body>
-                              </Accordion.Collapse>
-                            </Card>
-                          )
-                        })}
-                      </Accordion>
-                      <br/>
-                      <Button
-                        variant="secondary"
-                        block
-                        onClick={() => addNewTask(listIdx)}
-                      >
-                        <span style={{fontSize: 20}} >+</span> New Task
-                      </Button>
-                    </Card.Body>
-                  </Accordion.Collapse>
-                </Card>
-              )
-            })}
-          </Accordion>
-          <br/>
-          <Row>
-            <Col>
-              <Button
-                variant="primary"
-                block
-                onClick={() => addNewList()}
-              >
-                <span style={{fontSize: 20}} >+</span> New List
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-        <br/>
-      </>
+      <Tab.Container id="left-tabs-example" defaultActiveKey="lists">
+          <Nav fill variant="tabs">
+            <Nav.Item>
+              <Nav.Link eventKey="lists">My Lists</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="tasks">My Tasks</Nav.Link>
+            </Nav.Item>
+          </Nav>
+          <Tab.Content>
+            <Tab.Pane eventKey="lists">
+              <Container>
+                <br/>
+                <Row>
+                  <Col>
+                    <h4 className="text-center">Your Lists</h4>
+                  </Col>
+                </Row>
+                <br/>
+                <Accordion defaultActiveKey="0">
+                  {listsRender()}
+                </Accordion>
+                <br/>
+                <Row>
+                  <Col>
+                    <Button
+                      variant="primary"
+                      block
+                      onClick={() => addNewList()}
+                    >
+                      <span style={{fontSize: 20}} >+</span> New List
+                    </Button>
+                  </Col>
+                </Row>
+              </Container>
+              <br/>
+            </Tab.Pane>
+            <Tab.Pane eventKey="tasks">
+              <Container>
+                <br/>
+                <Row>
+                  <Col>
+                    <h4 className="text-center">Your Tasks</h4>
+                  </Col>
+                </Row>
+                <br/>
+                <Accordion defaultActiveKey="0">
+                  {listsRender()}
+                </Accordion>
+              </Container>
+              <br/>
+            </Tab.Pane>
+          </Tab.Content>
+      </Tab.Container>
     );
   }
 
