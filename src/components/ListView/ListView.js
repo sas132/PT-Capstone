@@ -391,7 +391,9 @@ const ListView = ({ styles, actions }) => {
         <Modal.Header closeButton>
           <Modal.Title>{modalData.title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{modalData.body}</Modal.Body>
+        <Modal.Body>
+          {modalData.body}
+        </Modal.Body>
         <Modal.Footer>
           {modalData.footer}
         </Modal.Footer>
