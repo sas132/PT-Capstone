@@ -32,7 +32,7 @@ const getLists = async function(req, res) {
 		res.status(500).send({msg: err});
 		console.warn(err);
 	}
-},
+}
 
 const deleteList = async function (req, res) {
 	try {
