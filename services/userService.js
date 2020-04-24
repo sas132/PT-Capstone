@@ -21,7 +21,7 @@ module.exports = {
       {'authId': authid}
     ).exec();
     console.log(user);
-    return user;
+    return JSON.stringify(user);
   },
 
   //get all users with an email address
