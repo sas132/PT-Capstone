@@ -34,10 +34,15 @@ module.exports = {
 	//updates the given list using the desired params
 	updateList: async function(list) {
 		return List.findByIdAndUpdate(
-			list._id,			//doc to update
+			list._id,	//doc to update
 			list,		//the change to implement
-			{new: true}//return updated doc
+			{new: true}	//return updated doc
 		)
+	},
+
+	//deletes a list by id
+	deleteList: async function(listid) {
+		return List.findByIdAndDelete(listid).exec();
 	}
 
 	/*NO LONGER NEEDED

@@ -68,6 +68,9 @@ app.get('/userList', function(req, res) {
 //gets user based on authID
 app.get('/user/auth/:authid', user.getUserByAuth);
 
+//deletes a list by id
+app.delete('/list/:listid', list.deleteList);
+
 // listen for requests :)
 const listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);

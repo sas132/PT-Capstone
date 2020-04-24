@@ -32,50 +32,17 @@ const getLists = async function(req, res) {
 		res.status(500).send({msg: err});
 		console.warn(err);
 	}
-}
+},
 
-/*TO BE REPLACED
-//add a task to a given list
-const addTask = async function(req, res) {
+const deleteList = async function (req, res) {
 	try {
-		if(req.body.listID && req.body.task) {
-			await listService.addTask(req.body.listID, req.body.task);
-		}
+		await listService.deleteList(req.params.listid);
+		res.send({msg: 'list deleted'});
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);
 	}
 }
-*/
-
-/* NO LONGER NEEDED WITH NEW SCHEMA
-//get tasks from a given list
-const getTasks = async function(req, res) {
-	try {
-		let tasks = await listService.getTasks(req.body.list);
-		console.log(tasks);
-
-		res.send({
-			msg: JSON.stringify(tasks)
-		});
-	} catch(err) {
-		res.status(500).send({msg: err});
-		console.warn(err);
-	}
-}
-
-//assign a task to a user
-const setUser = async function(req, res) {
-	try {
-		if(req.params.task && req.body.user) {
-			await listService.assign(req.params.task, req.body.user);
-		}
-	} catch(err) {
-		res.status(500).send({msg: err});
-		console.warn(err);
-	}
-}
-*/
 
 /*
 //removes a task from a list
@@ -97,7 +64,8 @@ const clearList = async function(req, res) {
 module.exports = {
 	newList: newList,
 	updateList: updateList,
-	getLists
+	getLists,
+	deleteList
 //	removeTask: removeTask,
 //	clearList: clearList
 }
