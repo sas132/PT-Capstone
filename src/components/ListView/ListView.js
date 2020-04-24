@@ -17,6 +17,8 @@ const ListView = ({ styles, actions }) => {
   const { getTokenSilently } = useAuth0();
   const [lists, setLists] = useState([]);
   const [loading, setLoading] = useState(false)
+  const [listLoading, setListLoading] = useState(false)
+  const [taskLoading, setTaskLoading] = useState(false)
   const [user, setUser] = useState(actions.getUser())
   const [show, setShow] = useState(false);
   const [modalData, setModalData] = useState({
