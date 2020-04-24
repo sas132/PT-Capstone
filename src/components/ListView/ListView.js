@@ -45,17 +45,103 @@ const ListView = ({ styles, actions }) => {
     points: 0
   }
 
+  const apiFindUsers = async (input) => {
+    try {
+      const token = await getTokenSilently()
+      let response = await fetch(`/user/email/${input}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const msg = await response.json()
+      return msg.msg
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
+  const apiGetNewList = async () => {
+    try {
+      const token = await getTokenSilently()
+      let response = await fetch('/list/new', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      response = await response.json()
+      return response.msg;
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
+  const apiGetLists = async () => {
+    try {
+      const token = await getTokenSilently()
+      let response = await fetch('/lists', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      response = await response.json()
+      return response.msg;
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
+  const apiUpdateList = async (listToUpdate) => {
+    try {
+      const tempList = JSON.parse(JSON.stringify(listToUpdate))
+      tempList.owner = tempList.owner._id
+      tempList.users = tempList.users.map(user => user._id);
+
+      const token = await getTokenSilently()
+      let response = await fetch('/list', {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tempList)
+      })
+      response = await response.json()
+      return response.msg;
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
+  const apiTest = async (listToUpdate) => {
+    try {
+      const tempList = JSON.parse(JSON.stringify(listToUpdate))
+      tempList.owner = tempList.owner._id
+      const token = await getTokenSilently()
+      let response = await fetch('/list', {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tempList)
+      })
+      response = await response.json()
+      console.log(response)
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
   const addNewList = () => {
     setListLoading(true);
-    getNewList()
+    apiGetNewList()
     .then((list) => {
       const newLists = JSON.parse(JSON.stringify(lists));
-      const newList = JSON.parse(JSON.stringify(listTemplate));
-      newList.owner = actions.getUser();
-      newList._id = list._id
-      newList.title = 'New List';
-      newList.description = 'Description...';
-      newLists.push(newList);
+      list.owner = actions.getUser();
+      newLists.push(list);
       setLists(newLists)
       setListLoading(false);
     })
@@ -65,19 +151,23 @@ const ListView = ({ styles, actions }) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
     list.title = newTitle;
-    setLists(newLists)
+    apiUpdateList(list);
+    setLists(newLists);
   }
 
   const updateListDescription = (listIdx, newDescription) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
     list.description = newDescription;
+    apiUpdateList(list);
     setLists(newLists)
   }
 
   const deleteList = (listIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
-    newLists.splice(listIdx, 1);
+    const list = newLists.splice(listIdx, 1);
+    list.owner = undefined;
+    apiUpdateList(list);
     setLists(newLists)
   }
   
@@ -129,55 +219,6 @@ const ListView = ({ styles, actions }) => {
     setLists(newLists)
   }
 
-  const findUsers = async (input) => {
-    try {
-      const token = await getTokenSilently()
-      let response = await fetch(`/user/email/${input}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const msg = await response.json()
-      return msg.msg
-    } catch(err) {
-      console.warn(err)
-    }
-  }
-
-  const getNewList = async () => {
-    try {
-      const token = await getTokenSilently()
-      let response = await fetch('/list/new', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      response = await response.json()
-      return response.msg;
-    } catch(err) {
-      console.warn(err)
-    }
-  }
-
-  const apiTest = async () => {
-    try {
-      console.log('hello')
-      const token = await getTokenSilently()
-      let response = await fetch('/lists', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      response = await response.json()
-      console.log(response)
-    } catch(err) {
-      console.warn(err)
-    }
-  }
-
   useEffect(() => {
     const timerGetUser = () => {
       const u = actions.getUser();
@@ -193,28 +234,12 @@ const ListView = ({ styles, actions }) => {
 
   useEffect(() => {
     if (user !== null && lists == null) {
-      const getLists = async () => {
-        try {
-          console.log('hello')
-          const token = await getTokenSilently()
-          let response = await fetch('/lists', {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          response = await response.json()
-          return response.msg;
-        } catch(err) {
-          console.warn(err)
-        }
-      }
-
-      getLists()
+      apiGetLists()
       .then((lists) => {
         lists.forEach(list => {
           if (list.owner === user._id) list.owner = user;
         })
+        console.log(lists)
         setLists(lists.length ? lists : []);
         setLoading(false);
       })
@@ -287,7 +312,7 @@ const ListView = ({ styles, actions }) => {
                   body: (
                     <UserSelector 
                       currentUser={task.assignedUser}
-                      findUser={(input) => findUsers(input)}
+                      findUser={(input) => apiFindUsers(input)}
                       setAssignedUser={(newUser) => setTempUser(newUser)}
                     />
                   ),
@@ -476,7 +501,7 @@ const ListView = ({ styles, actions }) => {
                     <Button
                       variant="primary"
                       block
-                      onClick={() => apiTest()}
+                      onClick={() => apiTest(lists[0])}
                     >
                       <span style={{fontSize: 20}} >+</span> Test
                     </Button>

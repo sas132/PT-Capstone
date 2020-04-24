@@ -7,6 +7,8 @@ module.exports = {
 	//adds a new list
 	newList: async function(user) {
 		return await List.create({
+			title: 'New Task',
+			description: 'Description...',
 			owner: user._id
 		})
 	},
@@ -30,10 +32,10 @@ module.exports = {
 	},
 
 	//updates the given list using the desired params
-	updateList: function(id, change) {
+	updateList: async function(list) {
 		return List.findByIdAndUpdate(
-			id,			//doc to update
-			change,		//the change to implement
+			list._id,			//doc to update
+			list,		//the change to implement
 			{new: true}//return updated doc
 		)
 	}
