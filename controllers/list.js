@@ -1,12 +1,12 @@
 const listService = require('../services/listService');
+const userService = require('../services/userService')
 
 //adds a new list
 const newList = async function(req, res) {
 	try {
-		if(req.body.title) {
-			list = await listService.newList(req.body.title);
-		}
-		res.send({msg: JSON.stringify(list)});
+		const user = await userService.addUser(req.userData);
+		const list = await listService.newList(user);
+		res.send({msg: list});
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);
@@ -21,6 +21,17 @@ const updateList = async function(req, res) {
 		
 			//res.send({msg: JSON.stringify(list)});
 		}
+	} catch(err) {
+		res.status(500).send({msg: err});
+		console.warn(err);
+	}
+}
+
+const getLists = async function(req, res) {
+	try {
+		const user = await userService.addUser(req.userData);
+		const list = await listService.getLists(user);
+		res.send({msg: list});
 	} catch(err) {
 		res.status(500).send({msg: err});
 		console.warn(err);
@@ -89,7 +100,8 @@ const clearList = async function(req, res) {
 
 module.exports = {
 	newList: newList,
-	updateList: updateList
+	updateList: updateList,
+	getLists
 //	removeTask: removeTask,
 //	clearList: clearList
 }

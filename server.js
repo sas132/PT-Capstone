@@ -18,13 +18,6 @@ const user = require('./controllers/user');
 // serve the built react app
 app.use(express.static(join(__dirname, "build")));
 
-app.get("/api/external", jwtCheck, getUserData, (req, res) => {
-  console.log('hello', req.userData)
-  res.send({
-    msg: "Your access token was successfully validated!"
-  });
-});
-
 app.use(function(err, req, res, next) {
   console.log('hello')
   if (err.name === "UnauthorizedError") {
@@ -38,12 +31,12 @@ app.use(function(err, req, res, next) {
 app.post('/user', jwtCheck, getUserData, user.add);
 
 //creates a new list
-app.get('/list/new', function(req, res) {
-  res.send({
-    msg: "new list"
-  });
-});
-app.post('/list/new', list.newList);
+app.get('/list/new', jwtCheck, getUserData, list.newList);
+
+//creates a new list
+app.get('/lists', jwtCheck, getUserData, list.getLists);
+
+// app.post('/list/new', list.newList);
 
 //create new task with no assigned user, return created task
 app.post('/task/new', task.newTask);
@@ -61,7 +54,7 @@ app.put('/task', function(req, res) {
 
 //get users where email contains a string
 //app.get('/user/email', user.getUserByEmail);
-app.get('/user/email/:input', user.getUsersByEmail);
+app.get('/user/email/:input', jwtCheck, user.getUsersByEmail);
 
 //gets all lists for a user
 //app.get('/user/lists', user.getLists);

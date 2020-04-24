@@ -16,10 +16,10 @@ import Modal from 'react-bootstrap/Modal';
 import Loading from '../Loading/Loading';
 import Image from 'react-bootstrap/Image';
 
-const UserSelector = ({ findUser, setAssignedUser }) => {
+const UserSelector = ({ currentUser, findUser, setAssignedUser }) => {
   const [ searchInput, setSearchInput ] = useState('');
   const [ userList, setUserList ] = useState([]);
-  const [ selectedUser, setSelectedUser ] = useState(null);
+  const [ selectedUser, setSelectedUser ] = useState(currentUser);
   const [loading, setLoading] = useState(false)
 
   return (
@@ -78,7 +78,7 @@ const UserSelector = ({ findUser, setAssignedUser }) => {
         </Table>
         <hr/>
       </div>
-      <div style={{ height: '300px', overflowY: 'scroll' }}>
+      <div style={{ minHeight: '200px', overflowY: 'scroll' }}>
         {
           loading
             ? (

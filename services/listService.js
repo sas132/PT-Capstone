@@ -5,10 +5,28 @@ const Task = require('../models/task');
 module.exports = {
 
 	//adds a new list
-	newList: function(title) {
-		return List.create({
-			title: title
+	newList: async function(user) {
+		return await List.create({
+			owner: user._id
 		})
+	},
+
+	getLists: async function(user) {
+		// const lists = await List.find(
+    //   { $or: [
+    //     {'_id': user._id},
+    //     {'tasks': { $elemMatch: { 'assignedUser': user._id } } }
+    //   ] }
+		// ).exec();
+		
+		const lists = await List.find(
+      { $or: [
+        {'owner': user._id},
+        {'tasks': { $elemMatch: { 'assignedUser': user._id } } }
+      ] }
+    ).exec();
+
+		return lists;
 	},
 
 	//updates the given list using the desired params

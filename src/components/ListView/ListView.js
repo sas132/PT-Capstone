@@ -16,8 +16,8 @@ import UserSelector from '../UserSelector/UserSelector';
 
 const ListView = ({ styles, actions }) => {
   const { getTokenSilently } = useAuth0();
-  const [lists, setLists] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [lists, setLists] = useState(null);
+  const [loading, setLoading] = useState(true)
   const [listLoading, setListLoading] = useState(false)
   const [taskLoading, setTaskLoading] = useState(false)
   const [user, setUser] = useState(actions.getUser())
@@ -31,21 +31,7 @@ const ListView = ({ styles, actions }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    const timerGetUser = () => {
-      const u = actions.getUser();
-      if (u !== null) {
-        setUser(u);
-      } else {
-        setTimeout(timerGetUser, 500)
-      }
-    }
-
-    if (user === null) timerGetUser();
-  }, [actions, user])
-
   const listTemplate = {
-    owner: '',
     title: '',
     description: '',
     users: [],
@@ -60,13 +46,19 @@ const ListView = ({ styles, actions }) => {
   }
 
   const addNewList = () => {
-    const newLists = JSON.parse(JSON.stringify(lists));
-    const newList = JSON.parse(JSON.stringify(listTemplate));
-    newLists.push(newList);
-    newList.owner = actions.getUser();
-    newList.title = 'New List';
-    newList.description = 'Description...';
-    setLists(newLists)
+    setListLoading(true);
+    getNewList()
+    .then((list) => {
+      const newLists = JSON.parse(JSON.stringify(lists));
+      const newList = JSON.parse(JSON.stringify(listTemplate));
+      newList.owner = actions.getUser();
+      newList._id = list._id
+      newList.title = 'New List';
+      newList.description = 'Description...';
+      newLists.push(newList);
+      setLists(newLists)
+      setListLoading(false);
+    })
   }
   
   const updateListTitle = (listIdx, newTitle) => {
@@ -152,12 +144,28 @@ const ListView = ({ styles, actions }) => {
       console.warn(err)
     }
   }
-  
+
+  const getNewList = async () => {
+    try {
+      const token = await getTokenSilently()
+      let response = await fetch('/list/new', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      response = await response.json()
+      return response.msg;
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
   const apiTest = async () => {
     try {
       console.log('hello')
       const token = await getTokenSilently()
-      let response = await fetch("/user/email/benson", {
+      let response = await fetch('/lists', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
@@ -169,6 +177,49 @@ const ListView = ({ styles, actions }) => {
       console.warn(err)
     }
   }
+
+  useEffect(() => {
+    const timerGetUser = () => {
+      const u = actions.getUser();
+      if (u !== null) {
+        setUser(u);
+      } else {
+        setTimeout(timerGetUser, 500)
+      }
+    }
+
+    if (user === null) timerGetUser();
+  }, [actions, user])
+
+  useEffect(() => {
+    if (user !== null && lists == null) {
+      const getLists = async () => {
+        try {
+          console.log('hello')
+          const token = await getTokenSilently()
+          let response = await fetch('/lists', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          response = await response.json()
+          return response.msg;
+        } catch(err) {
+          console.warn(err)
+        }
+      }
+
+      getLists()
+      .then((lists) => {
+        lists.forEach(list => {
+          if (list.owner === user._id) list.owner = user;
+        })
+        setLists(lists.length ? lists : []);
+        setLoading(false);
+      })
+    }
+  }, [getTokenSilently, lists, user])
 
   const tasksOwnerRender = (list, listIdx) => list.tasks.map((task, taskIdx) => {
     return (
@@ -235,6 +286,7 @@ const ListView = ({ styles, actions }) => {
                   title: 'Delete Task Confirmation',
                   body: (
                     <UserSelector 
+                      currentUser={task.assignedUser}
                       findUser={(input) => findUsers(input)}
                       setAssignedUser={(newUser) => setTempUser(newUser)}
                     />
