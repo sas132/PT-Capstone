@@ -16,7 +16,7 @@ const addList = async function(req, res) {
 const add = async function(req, res) {
   try {
     const result = await userService.addUser(req.userData);
-    res.status(200).send(result);
+    res.status(200).send({msg: result});
   } catch(err) {
     res.status(500).send({msg: err});
     console.warn(err);
@@ -25,7 +25,7 @@ const add = async function(req, res) {
 
 const getUsersByEmail = async function(req, res) {
   try {
-    users = await userService.getUsersByEmail()
+    const users = await userService.getUsersByEmail(req.params.input);
     res.send({msg: users});
   } catch(err) {
     res.status(500).send({msg: err});

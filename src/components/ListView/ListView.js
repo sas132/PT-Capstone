@@ -132,8 +132,8 @@ const ListView = ({ styles, actions }) => {
     try {
       console.log('hello')
       const token = await getTokenSilently()
-      let response = await fetch("/user", {
-        method: 'POST',
+      let response = await fetch("/user/email/benson", {
+        method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -358,6 +358,13 @@ const ListView = ({ styles, actions }) => {
                       onClick={() => addNewList()}
                     >
                       <span style={{fontSize: 20}} >+</span> New List
+                    </Button>
+                    <Button
+                      variant="primary"
+                      block
+                      onClick={() => apiTest()}
+                    >
+                      <span style={{fontSize: 20}} >+</span> Test
                     </Button>
                   </Col>
                 </Row>
