@@ -35,6 +35,7 @@ const getUsersByEmail = async function(req, res) {
 
 module.exports = {
   removeUser: removeUser,
+  add: add,
   addList: addList,
   getUsersByEmail: getUsersByEmail
 }
