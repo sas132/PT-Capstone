@@ -70,6 +70,9 @@ app.get('/user/auth/:authid', user.getUserByAuth);
 //deletes a list by id
 app.delete('/list/:listid', list.deleteList);
 
+//deletes a task by id
+app.delete('/task/:taskid', task.deleteTask)
+
 // listen for requests :)
 const listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);

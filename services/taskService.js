@@ -9,5 +9,10 @@ module.exports = {
             completed: false,
             points: 0
         })
-    }
+    },
+
+    //deletes a task by id
+	deleteTask: async function(taskid) {
+		return Task.findByIdAndDelete(taskid).exec();
+	}
 }
