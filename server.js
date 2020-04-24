@@ -65,12 +65,10 @@ app.get('/userList', function(req, res) {
 })
 
 //gets user based on authID
-//app.get('/user/:authid', user.getUserbyAuthID);
-app.get('/userAuth', function(req, res) {
-  res.send({
-    msg: 'get user based on authid'
-  });
-})
+app.get('/user/auth/:authid', user.getUserByAuth);
+
+//deletes a list by id
+app.delete('/list/:listid', list.deleteList);
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT || 3000, function () {

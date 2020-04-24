@@ -23,6 +23,16 @@ const add = async function(req, res) {
   }
 }
 
+const getUserByAuth = async function(req, res) {
+  try {
+    const user = await userService.getUserByAuth(req.params.authid);
+    res.send({msg: user});
+  } catch(err) {
+    res.status(500).send({msg: err});
+    console.warn(err);
+  }
+}
+
 const getUsersByEmail = async function(req, res) {
   try {
     const users = await userService.getUsersByEmail(req.params.input);
@@ -37,5 +47,6 @@ module.exports = {
   removeUser: removeUser,
   add: add,
   addList: addList,
+  getUserByAuth: getUserByAuth,
   getUsersByEmail: getUsersByEmail
 }
