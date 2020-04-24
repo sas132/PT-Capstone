@@ -6,7 +6,7 @@ module.exports = {
 	//add new users to db
 	addUser: async function(userData) {
     // check if user already exists
-    let result = await User.find( { auth_id: { $eq: userData.authId } } ).exec()
+    let result = await User.find( { authId: { $eq: userData.authId } } ).exec()
     if (result.length === 0) {
       // add user if user doens't exist
       result = await User.create(userData)
@@ -32,7 +32,6 @@ module.exports = {
         {'email': {$regex : `.*${input}.*`}}
       ] }
     ).exec();
-    console.log(users)
     return users;
   }
 }

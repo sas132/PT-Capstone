@@ -17,7 +17,7 @@ module.exports = {
 	getLists: async function(user) {
 		let lists = await List.find(
       { $or: [
-        {'owner': user._id},
+        {'owner': { $exists: true, $eq:user._id }},
         {'tasks': { $elemMatch: { 'assignedUser': user._id } } }
       ] }
 		).exec();
