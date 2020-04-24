@@ -42,15 +42,9 @@ app.put('/list', jwtCheck, list.updateList);
 //create new task with no assigned user, return created task
 app.get('/task/new', jwtCheck, getUserData, task.newTask);
 
-// app.post('/list/new', list.newList);
+app.put('/task', jwtCheck, task.updateTask);
 
-//update task by id
-//app.put('/task', task.update);
-app.put('/task', function(req, res) {
-  res.send({
-    msg: 'update task by id'
-  });
-})
+// app.post('/list/new', list.newList);
 
 //get users where email contains a string
 //app.get('/user/email', user.getUserByEmail);

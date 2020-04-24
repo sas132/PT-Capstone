@@ -9,5 +9,13 @@ module.exports = {
             completed: false,
             points: 0
         })
-    }
+    },
+
+    updateTask: async function(task) {
+		return await Task.findByIdAndUpdate(
+			task._id,			//doc to update
+			task,		//the change to implement
+			{new: true}	//return updated doc
+		)
+	},
 }

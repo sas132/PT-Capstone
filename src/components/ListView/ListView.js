@@ -142,20 +142,17 @@ const ListView = ({ styles, actions }) => {
   const apiUpdateTask = async (taskToUpdate) => {
     const apiUpdate = async (taskToUpdateInner) =>{
       try {
-        const tempList = JSON.parse(JSON.stringify(taskToUpdateInner))
-        tempList.owner = tempList.owner === undefined ? undefined : tempList.owner._id
-        tempList.users = tempList.users.map(user => user._id);
-        tempList.tasks = tempList.tasks.map(task => task.task);
-        console.log(tempList)
+        const tempTask = JSON.parse(JSON.stringify(taskToUpdateInner))
+        console.log(tempTask)
 
         const token = await getTokenSilently()
-        let response = await fetch('/list', {
+        let response = await fetch('/task', {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(tempList)
+          body: JSON.stringify(tempTask)
         })
         response = await response.json()
         tasksToUpdate.current = tasksToUpdate.current.filter(task =>  task._id !== taskToUpdate._id)
@@ -168,7 +165,7 @@ const ListView = ({ styles, actions }) => {
     const deb = tasksToUpdate.current.find((task) => task._id === taskToUpdate._id)
 
     if (!deb) {
-      listsToUpdate.current.push({
+      tasksToUpdate.current.push({
         _id: taskToUpdate._id,
         timer: setTimeout(() => {
           apiUpdate(taskToUpdate);
@@ -259,17 +256,10 @@ const ListView = ({ styles, actions }) => {
       const list = newLists[listIdx];
       task.assignedUser = null;
       list.tasks.push(task);
-      apiUpdateList(list);
+      apiUpdateList(list)
       setLists(newLists);
       setTaskLoading(false);
     })
-    // const newLists = JSON.parse(JSON.stringify(lists));
-    // const list = newLists[listIdx];
-    // const newTask = JSON.parse(JSON.stringify(taskTemplate));
-    // newTask.task = 'New Task'
-    // list.tasks.push(newTask);
-    // // apiUpdateList(list);
-    // setLists(newLists)
   }
   
   const updateTaskName = (listIdx, taskIdx, newTaskName) => {
@@ -277,6 +267,7 @@ const ListView = ({ styles, actions }) => {
     const list = newLists[listIdx];
     const task = list.tasks[taskIdx];
     task.task = newTaskName;
+    apiUpdateTask(task);
     setLists(newLists)
   }
   
@@ -285,7 +276,8 @@ const ListView = ({ styles, actions }) => {
     const list = newLists[listIdx];
     const task = list.tasks[taskIdx];
     task.points = newTaskPoints;
-    setLists(newLists)
+    apiUpdateTask(task);
+    setLists(newLists);
   }
   
   const updateTaskCompleted = (listIdx, taskIdx) => {
@@ -293,6 +285,7 @@ const ListView = ({ styles, actions }) => {
     const list = newLists[listIdx];
     const task = list.tasks[taskIdx];
     task.completed = !task.completed;
+    apiUpdateTask(task);
     setLists(newLists)
   }
 
@@ -301,13 +294,15 @@ const ListView = ({ styles, actions }) => {
     const list = newLists[listIdx];
     const task = list.tasks[taskIdx];
     task.assignedUser = newUser
+    apiUpdateTask(task);
     setLists(newLists)
   }
 
   const deleteTask = (listIdx, taskIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists[listIdx];
-    list.tasks.splice(taskIdx, 1);
+    const task = list.tasks.splice(taskIdx, 1);
+    apiUpdateList(list);
     setLists(newLists)
   }
 
@@ -337,6 +332,106 @@ const ListView = ({ styles, actions }) => {
       })
     }
   }, [getTokenSilently, lists, user])
+
+  const tasksRender = (list, listIdx) => list.tasks
+  .filter(task => task.assignedUser && task.assignedUser._id === user._id)
+  .map((task, taskIdx) => {
+    return (
+      <Card key={`${task.assignedUser}${taskIdx}`}>
+        <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
+          <span>
+            <span
+              className="float-left"
+              style={{ 
+                wordBreak: 'break-all',
+                marginTop: '2px',
+                overflow: 'hidden'
+              }}
+            >
+              {`${taskIdx + 1}. ${task.task}`}
+            </span>
+            <div className="float-right" >
+              <span style={{ marginTop: '2px', paddingRight: '5px'}}>Completed: </span>
+              <Button
+                size="sm"
+                variant={`outline-${task.completed ? 'success' : 'dark'}`}
+                onClick={(e) => {e.stopPropagation(); updateTaskCompleted(listIdx, taskIdx)}}
+              >
+                {task.completed ? '✔':'❌'}
+              </Button>
+            </div>
+          </span>
+        </Accordion.Toggle>
+        <Accordion.Collapse eventKey={`${listIdx}${taskIdx}`}>
+          <Card.Body>
+            Task: 
+            <Form.Control
+              disabled
+              size="sm"
+              type="text"
+              value={task.task}
+              onChange={(e) => updateTaskName(listIdx, taskIdx, e.target.value)}
+            />
+            <br/>
+            <span>Points: <small>(Integers only)</small></span>
+            <Form.Control
+              disabled
+              size="sm"
+              type="text"
+              value={task.points}
+              onChange={(e) => {
+                let newPoints = parseInt(e.target.value);
+                if (isNaN(newPoints)) {
+                  newPoints = 0;
+                }
+                updateTaskPoints(listIdx, taskIdx, newPoints)
+              }}
+            />
+            <br/>
+            <span>Assigned User: </span>
+            <Button
+              disabled
+              block
+              size="sm"
+              variant="outline-info"
+              onClick={() => {
+                let tempUser = null;
+                const setTempUser = (newTempUser) => {
+                  tempUser = newTempUser;
+                }
+                setModalData({
+                  title: 'Delete Task Confirmation',
+                  body: (
+                    <UserSelector 
+                      currentUser={task.assignedUser}
+                      findUser={(input) => apiFindUsers(input)}
+                      setAssignedUser={(newUser) => setTempUser(newUser)}
+                    />
+                  ),
+                  footer: (
+                    <>
+                      <Button variant="primary" onClick={
+                        () => {
+                          updateTaskUser(listIdx, taskIdx, tempUser)
+                          handleClose();
+                        }
+                      }>
+                        Accept
+                      </Button>
+                    </>
+                  )
+                })
+                handleShow(listIdx)
+              }}
+            >
+              {task.assignedUser ? task.assignedUser.email : 'Assign New User'}
+            </Button>
+            <br/>
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
+    )
+  })
 
   const tasksOwnerRender = (list, listIdx) => list.tasks.map((task, taskIdx) => {
     return (
@@ -461,8 +556,10 @@ const ListView = ({ styles, actions }) => {
     )
   })
 
-  const listsRender = () => lists
-    .filter((list) => list.owner._id === user._id)
+  const listsRender = (owner) => lists
+    .filter((list) => owner 
+      ? list.owner._id === user._id
+      : list.tasks.some(task => task.assignedUser && task.assignedUser._id === user._id))
     .map((list, listIdx) => {
     return (
       <Card key={`${list.tasks}${listIdx}`}>
@@ -483,9 +580,13 @@ const ListView = ({ styles, actions }) => {
             }}
           >
             {`Tasks Completed: ${
-              list.tasks.filter(task => task.completed).length
+              owner
+              ? list.tasks.filter(task => task.completed).length
+              : list.tasks.filter(task => task.assignedUser && task.assignedUser._id === user._id && task.completed).length
             } / ${
-              list.tasks.length
+              owner
+              ? list.tasks.length
+              : list.tasks.filter(task => task.assignedUser && task.assignedUser._id === user._id).length
             }`}
           </span>
         </span>
@@ -494,6 +595,7 @@ const ListView = ({ styles, actions }) => {
           <Card.Body>
             Title: 
             <Form.Control
+              disabled={!owner}
               size="sm"
               type="text"
               value={list.title}
@@ -502,6 +604,7 @@ const ListView = ({ styles, actions }) => {
             <br/>
             Description: 
             <Form.Control
+            disabled={!owner}
               size="sm"
               as="textarea"
               rows="3"
@@ -511,17 +614,18 @@ const ListView = ({ styles, actions }) => {
             <br/>
             <Accordion defaultActiveKey="0">
               Tasks:
-              {tasksOwnerRender(list, listIdx)}
+              {owner ? tasksOwnerRender(list, listIdx) : tasksRender(list, listIdx)}
             </Accordion>
             <br/>
-            <Button
+            {owner ? (<Button
               variant="secondary"
               block
               onClick={() => addNewTask(listIdx)}
             >
               <span style={{fontSize: 20}} >+</span> New Task
-            </Button>
-            <Button
+            </Button>) : null}
+            {owner ? (<Button
+              disabled={!owner}
               size="sm"
               variant="outline-danger"
               block
@@ -547,7 +651,7 @@ const ListView = ({ styles, actions }) => {
               }}
             >
               {'🗑️ Delete List'}
-            </Button>
+            </Button>) : null}
           </Card.Body>
         </Accordion.Collapse>
       </Card>
@@ -578,7 +682,7 @@ const ListView = ({ styles, actions }) => {
                 </Row>
                 <br/>
                 <Accordion defaultActiveKey="0">
-                  {listsRender()}
+                  {listsRender(true)}
                 </Accordion>
                 <br/>
                 <Row>
@@ -589,13 +693,6 @@ const ListView = ({ styles, actions }) => {
                       onClick={() => addNewList()}
                     >
                       <span style={{fontSize: 20}} >+</span> New List
-                    </Button>
-                    <Button
-                      variant="primary"
-                      block
-                      onClick={() => apiTest(lists[0])}
-                    >
-                      <span style={{fontSize: 20}} >+</span> Test
                     </Button>
                   </Col>
                 </Row>
@@ -613,7 +710,7 @@ const ListView = ({ styles, actions }) => {
                 </Row>
                 <br/>
                 <Accordion defaultActiveKey="0">
-                  {listsRender()}
+                  {listsRender(false)}
                 </Accordion>
               </Container>
               <br/>

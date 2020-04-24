@@ -11,6 +11,18 @@ const newTask = async function(req, res) {
 	}
 }
 
+const updateTask = async function(req, res) {
+	console.log(req.body)
+	try {
+		const task = await taskService.updateTask(req.body);
+		res.send({msg: task});
+	} catch(err) {
+		res.status(500).send({msg: err});
+		console.warn(err);
+	}
+}
+
 module.exports = {
-  newTask: newTask
+	newTask: newTask,
+	updateTask
 }
