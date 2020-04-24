@@ -16,6 +16,14 @@ module.exports = {
     return result;
   },
 
+  getUserByAuth: async function(authid) {
+    const user = await User.find(
+      {'authId': authid}
+    ).exec();
+    console.log(user);
+    return user;
+  },
+
   //get all users with an email address
   getUsersByEmail: async function(input) {
     const users = await User.find(
