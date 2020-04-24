@@ -13,5 +13,11 @@ module.exports = {
       result = await User.create(userData)
     }
     return result;
+  },
+
+  //get all users with an email address
+  getUsersByEmail: async function() {
+    users = await User.find({'email': {$regex : "*"}});
+    return users;
   }
 }

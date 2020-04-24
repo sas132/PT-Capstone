@@ -23,8 +23,18 @@ const add = async function(req, res) {
   }
 }
 
+const getUsersByEmail = async function(req, res) {
+  try {
+    users = await userService.getUsersByEmail()
+    res.send({msg: users});
+  } catch(err) {
+    res.status(500).send({msg: err});
+    console.warn(err);
+  }
+}
+
 module.exports = {
   removeUser: removeUser,
   addList: addList,
-  add
+  getUsersByEmail: getUsersByEmail
 }
