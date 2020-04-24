@@ -17,6 +17,7 @@ const updateList = async function(req, res) {
 	try {
 		if(req.params.id && req.body) {
 			list = await listService.updateList(req.params.id, req.body);
+			res.send({msg: req.params.id + '\n' + req.body});
 		}
 		res.send({msg: JSON.stringify(list)});
 	} catch(err) {
