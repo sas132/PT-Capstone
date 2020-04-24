@@ -29,7 +29,9 @@ module.exports = {
 		lists = await Promise.all(lists.map(async (list) => {
 			list.tasks = await Promise.all(list.tasks.map(async (task) => {
 				task = await Task.findById(task._id);
-				task.assignedUser = await User.findById(task.assignedUser._id);
+				task.assignedUser = task.assignedUser
+					? await User.findById(task.assignedUser._id)
+					: await task.assignedUser;
 				return task;
 			}));
 			list.users = await Promise.all(list.users.map(async (user) => {
