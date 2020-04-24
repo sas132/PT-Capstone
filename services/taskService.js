@@ -17,5 +17,10 @@ module.exports = {
 			task,		//the change to implement
 			{new: true}	//return updated doc
 		)
-	},
+    },
+    
+    //deletes a task by id
+	deleteTask: async function(taskid) {
+		return Task.findByIdAndDelete(taskid).exec();
+	}
 }

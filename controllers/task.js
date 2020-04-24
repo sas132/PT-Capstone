@@ -22,7 +22,18 @@ const updateTask = async function(req, res) {
 	}
 }
 
+const deleteTask = async function (req, res) {
+	try {
+		await taskService.deleteTask(req.params.taskid);
+		res.send({msg: 'task deleted'});
+	} catch(err) {
+		res.status(500).send({msg: err});
+		console.warn(err);
+	}
+}
+
 module.exports = {
 	newTask: newTask,
-	updateTask
+	updateTask,
+  deleteTask
 }
