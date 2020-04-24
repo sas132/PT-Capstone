@@ -3,11 +3,11 @@ const Task = require('../models/task');
 
 module.exports = {
     //adds a new task
-    newTask: function(task) {
-        return Task.create({
-            task: task
+    newTask: async function() {
+        return await Task.create({
+            task: 'New Task',
+            completed: false,
+            points: 0
         })
     }
-
-    
 }

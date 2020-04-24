@@ -98,8 +98,11 @@ const ListView = ({ styles, actions }) => {
     const apiUpdate = async (listToUpdateInner) =>{
       try {
         const tempList = JSON.parse(JSON.stringify(listToUpdateInner))
-        tempList.owner = tempList.owner._id
+        tempList.owner = tempList.owner === undefined ? undefined : tempList.owner._id
+        console.log(JSON.stringify(tempList));
         tempList.users = tempList.users.map(user => user._id);
+        tempList.tasks = tempList.tasks.map(task => task._id);
+        console.log(tempList)
   
         const token = await getTokenSilently()
         let response = await fetch('/list', {
@@ -140,9 +143,11 @@ const ListView = ({ styles, actions }) => {
     const apiUpdate = async (taskToUpdateInner) =>{
       try {
         const tempList = JSON.parse(JSON.stringify(taskToUpdateInner))
-        tempList.owner = tempList.owner._id
+        tempList.owner = tempList.owner === undefined ? undefined : tempList.owner._id
         tempList.users = tempList.users.map(user => user._id);
-  
+        tempList.tasks = tempList.tasks.map(task => task.task);
+        console.log(tempList)
+
         const token = await getTokenSilently()
         let response = await fetch('/list', {
           method: 'PUT',
@@ -177,18 +182,30 @@ const ListView = ({ styles, actions }) => {
     }
   }
 
-  const apiTest = async (listToUpdate) => {
+  const apiGetNewTask = async (listToUpdate) => {
     try {
-      const tempList = JSON.parse(JSON.stringify(listToUpdate))
-      tempList.owner = tempList.owner._id
       const token = await getTokenSilently()
-      let response = await fetch('/list', {
-        method: 'PUT',
+      let response = await fetch('/task/new', {
+        method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(tempList)
+        }
+      })
+      response = await response.json()
+      return response.msg;
+    } catch(err) {
+      console.warn(err)
+    }
+  }
+
+  const apiTest = async (listToUpdate) => {
+    try {
+      const token = await getTokenSilently()
+      let response = await fetch('/task/new', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
       })
       response = await response.json()
       console.log(response)
@@ -227,20 +244,32 @@ const ListView = ({ styles, actions }) => {
 
   const deleteList = (listIdx) => {
     const newLists = JSON.parse(JSON.stringify(lists));
-    const list = newLists.splice(listIdx, 1);
+    const list = newLists.splice(listIdx, 1)[0];
     list.owner = undefined;
+    console.log(JSON.stringify(list));
     apiUpdateList(list);
     setLists(newLists)
   }
   
   const addNewTask = (listIdx) => {
-    const newLists = JSON.parse(JSON.stringify(lists));
-    const list = newLists[listIdx];
-    const newTask = JSON.parse(JSON.stringify(taskTemplate));
-    newTask.task = 'New Task'
-    list.tasks.push(newTask);
-    // apiUpdateList(list);
-    setLists(newLists)
+    setTaskLoading(true);
+    apiGetNewTask()
+    .then((task) => {
+      const newLists = JSON.parse(JSON.stringify(lists));
+      const list = newLists[listIdx];
+      task.assignedUser = null;
+      list.tasks.push(task);
+      apiUpdateList(list);
+      setLists(newLists);
+      setTaskLoading(false);
+    })
+    // const newLists = JSON.parse(JSON.stringify(lists));
+    // const list = newLists[listIdx];
+    // const newTask = JSON.parse(JSON.stringify(taskTemplate));
+    // newTask.task = 'New Task'
+    // list.tasks.push(newTask);
+    // // apiUpdateList(list);
+    // setLists(newLists)
   }
   
   const updateTaskName = (listIdx, taskIdx, newTaskName) => {
@@ -395,7 +424,7 @@ const ListView = ({ styles, actions }) => {
                 handleShow(listIdx)
               }}
             >
-              {task.assignedUser.email || 'Assign New User'}
+              {task.assignedUser ? task.assignedUser.email : 'Assign New User'}
             </Button>
             <br/>
             <Button

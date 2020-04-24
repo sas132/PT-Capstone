@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const List = require('../models/list');
 const Task = require('../models/task');
+const User = require('../models/user');
 
 module.exports = {
 
@@ -14,26 +15,29 @@ module.exports = {
 	},
 
 	getLists: async function(user) {
-		// const lists = await List.find(
-    //   { $or: [
-    //     {'_id': user._id},
-    //     {'tasks': { $elemMatch: { 'assignedUser': user._id } } }
-    //   ] }
-		// ).exec();
-		
-		const lists = await List.find(
+		let lists = await List.find(
       { $or: [
         {'owner': user._id},
         {'tasks': { $elemMatch: { 'assignedUser': user._id } } }
       ] }
-    ).exec();
+		).exec();
+		
+		lists = await Promise.all(lists.map(async (list) => {
+			list.tasks = await Promise.all(list.tasks.map(async (task) => {
+				return await Task.findById(task._id);
+			}));
+			list.users = await Promise.all(list.users.map(async (user) => {
+				return await User.findById(user._id);
+			}));
+			return list;
+		}));
 
 		return lists;
 	},
 
 	//updates the given list using the desired params
 	updateList: async function(list) {
-		return List.findByIdAndUpdate(
+		return await List.findByIdAndUpdate(
 			list._id,			//doc to update
 			list,		//the change to implement
 			{new: true}//return updated doc

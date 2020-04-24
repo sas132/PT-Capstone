@@ -15,6 +15,7 @@ const newList = async function(req, res) {
 
 const updateList = async function(req, res) {
 	try {
+		if (!req.body.owner) req.body.owner = undefined;
 		const list = await listService.updateList(req.body);
 		res.send({msg: list});
 	} catch(err) {

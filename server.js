@@ -39,11 +39,10 @@ app.get('/lists', jwtCheck, getUserData, list.getLists);
 //update list by id
 app.put('/list', jwtCheck, list.updateList);
 
+//create new task with no assigned user, return created task
+app.get('/task/new', jwtCheck, getUserData, task.newTask);
 
 // app.post('/list/new', list.newList);
-
-//create new task with no assigned user, return created task
-app.post('/task/new', task.newTask);
 
 //update task by id
 //app.put('/task', task.update);
