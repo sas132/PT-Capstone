@@ -55,7 +55,7 @@ app.put('/task', function(req, res) {
 
 //get users where email contains a string
 //app.get('/user/email', user.getUserByEmail);
-app.get('/user/email/:input', jwtCheck, user.getUsersByEmail);
+app.get('/user/email/:input', user.getUsersByEmail);
 
 //gets all lists for a user
 //app.get('/user/lists', user.getLists);

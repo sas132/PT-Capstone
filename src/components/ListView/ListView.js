@@ -177,6 +177,7 @@ const ListView = ({ styles, actions }) => {
     const newTask = JSON.parse(JSON.stringify(taskTemplate));
     newTask.task = 'New Task'
     list.tasks.push(newTask);
+    // apiUpdateList(list);
     setLists(newLists)
   }
   
