@@ -7,7 +7,7 @@ module.exports = {
 	//adds a new list
 	newList: async function(user) {
 		return await List.create({
-			title: 'New Task',
+			title: 'New List',
 			description: 'Description...',
 			owner: user._id
 		})

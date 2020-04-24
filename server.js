@@ -37,7 +37,7 @@ app.get('/list/new', jwtCheck, getUserData, list.newList);
 app.get('/lists', jwtCheck, getUserData, list.getLists);
 
 //update list by id
-app.put('/list', list.updateList);
+app.put('/list', jwtCheck, list.updateList);
 
 
 // app.post('/list/new', list.newList);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import { useAuth0 } from "../../react-auth0-spa";
@@ -93,25 +93,87 @@ const ListView = ({ styles, actions }) => {
     }
   }
 
+  const listsToUpdate = useRef([]);
   const apiUpdateList = async (listToUpdate) => {
-    try {
-      const tempList = JSON.parse(JSON.stringify(listToUpdate))
-      tempList.owner = tempList.owner._id
-      tempList.users = tempList.users.map(user => user._id);
+    const apiUpdate = async (listToUpdateInner) =>{
+      try {
+        const tempList = JSON.parse(JSON.stringify(listToUpdateInner))
+        tempList.owner = tempList.owner._id
+        tempList.users = tempList.users.map(user => user._id);
+  
+        const token = await getTokenSilently()
+        let response = await fetch('/list', {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tempList)
+        })
+        response = await response.json()
+        listsToUpdate.current = listsToUpdate.current.filter(list =>  list._id !== listToUpdateInner._id)
+        return response.msg;
+      } catch(err) {
+        console.warn(err)
+      }
+    }
 
-      const token = await getTokenSilently()
-      let response = await fetch('/list', {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(tempList)
+    const deb = listsToUpdate.current.find((list) => list._id === listToUpdate._id)
+
+    if (!deb) {
+      listsToUpdate.current.push({
+        _id: listToUpdate._id,
+        timer: setTimeout(() => {
+          apiUpdate(listToUpdate);
+        }, 1500)
       })
-      response = await response.json()
-      return response.msg;
-    } catch(err) {
-      console.warn(err)
+    } else {
+      clearTimeout(deb.timer);
+      deb.timer = setTimeout(() => {
+        apiUpdate(listToUpdate);
+      }, 1500)
+    }
+  }
+
+  const tasksToUpdate = useRef([]);
+  const apiUpdateTask = async (taskToUpdate) => {
+    const apiUpdate = async (taskToUpdateInner) =>{
+      try {
+        const tempList = JSON.parse(JSON.stringify(taskToUpdateInner))
+        tempList.owner = tempList.owner._id
+        tempList.users = tempList.users.map(user => user._id);
+  
+        const token = await getTokenSilently()
+        let response = await fetch('/list', {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(tempList)
+        })
+        response = await response.json()
+        tasksToUpdate.current = tasksToUpdate.current.filter(task =>  task._id !== taskToUpdate._id)
+        return response.msg;
+      } catch(err) {
+        console.warn(err)
+      }
+    }
+
+    const deb = tasksToUpdate.current.find((task) => task._id === taskToUpdate._id)
+
+    if (!deb) {
+      listsToUpdate.current.push({
+        _id: taskToUpdate._id,
+        timer: setTimeout(() => {
+          apiUpdate(taskToUpdate);
+        }, 1500)
+      })
+    } else {
+      clearTimeout(deb.timer);
+      deb.timer = setTimeout(() => {
+        apiUpdate(taskToUpdate);
+      }, 1500)
     }
   }
 
