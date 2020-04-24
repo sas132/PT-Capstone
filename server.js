@@ -102,11 +102,7 @@ app.get('/user/:authid', function(req, res) {
 
 //get users where email contains a string
 //app.get('/user/email', user.getUserByEmail);
-app.get('/user/email', function(req, res) {
-  res.send({
-    msg: 'get users with registered email'
-  });
-})
+app.get('/user/email', user.getUsersByEmail);
 
 
 // listen for requests :)
