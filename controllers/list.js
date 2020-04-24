@@ -4,7 +4,7 @@ const userService = require('../services/userService')
 //adds a new list
 const newList = async function(req, res) {
 	try {
-		const user = await userService.addUser(req.userData);
+		const user = await userService.getUserByAuth(req.userData.authId);
 		const list = await listService.newList(user);
 		res.send({msg: list});
 	} catch(err) {
@@ -26,7 +26,7 @@ const updateList = async function(req, res) {
 
 const getLists = async function(req, res) {
 	try {
-		const user = await userService.addUser(req.userData);
+		const user = await userService.getUserByAuth(req.userData.authId);
 		const list = await listService.getLists(user);
 		res.send({msg: list});
 	} catch(err) {

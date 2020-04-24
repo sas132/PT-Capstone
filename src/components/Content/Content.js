@@ -14,6 +14,7 @@ const Content = ({ styles, comp, actions, user }) => {
       setUserSent(true);
       getTokenSilently()
       .then(token => {
+        console.log('sending')
         return fetch("/user", {
           method: 'POST',
           headers: {
