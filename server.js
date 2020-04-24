@@ -66,7 +66,7 @@ app.get('/userList', function(req, res) {
 })
 
 //gets user based on authID
-app.get('/user/auth/:authid', user.getUserbyAuthID);
+app.get('/user/auth/:authid', user.getUserbyAuth);
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT || 3000, function () {
