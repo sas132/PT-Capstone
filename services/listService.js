@@ -16,7 +16,7 @@ module.exports = {
 		return List.findByIdAndUpdate(
 			id,			//doc to update
 			change,		//the change to implement
-			{new: true},//return updated doc
+			{new: true}//return updated doc
 		)
 	}
 
