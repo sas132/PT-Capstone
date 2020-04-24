@@ -20,7 +20,6 @@ module.exports = {
     const user = await User.find(
       {'authId': authid}
     ).exec();
-    console.log(user);
     return user;
   },
 
@@ -32,7 +31,6 @@ module.exports = {
         {'email': {$regex : `.*${input}.*`}}
       ] }
     ).exec();
-    console.log(users)
     return users;
   }
 }
