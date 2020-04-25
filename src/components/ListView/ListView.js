@@ -16,7 +16,7 @@ import UserSelector from '../UserSelector/UserSelector';
 
 const ListView = ({ styles, actions }) => {
   const { getTokenSilently } = useAuth0();
-  const [lists, setLists] = useState(null);
+  let [lists, setLists] = useState(null);
   const [loading, setLoading] = useState(true)
   const [listLoading, setListLoading] = useState(false)
   const [taskLoading, setTaskLoading] = useState(false)
@@ -43,6 +43,17 @@ const ListView = ({ styles, actions }) => {
     task: '',
     completed: false,
     points: 0
+  }
+
+  const indexLists = (lists) => {
+    const newLists = JSON.parse(JSON.stringify(lists));
+    newLists.forEach((list, lidx) => {
+      list.listIdx = lidx;
+      list.tasks.forEach((task, tidx) => {
+        task.taskIdx = tidx;
+      })
+    });
+    return newLists;
   }
 
   const apiFindUsers = async (input) => {
@@ -99,10 +110,8 @@ const ListView = ({ styles, actions }) => {
       try {
         const tempList = JSON.parse(JSON.stringify(listToUpdateInner))
         tempList.owner = tempList.owner === undefined ? undefined : tempList.owner._id
-        console.log(JSON.stringify(tempList));
         tempList.users = tempList.users.map(user => user._id);
         tempList.tasks = tempList.tasks.map(task => task._id);
-        console.log(tempList)
   
         const token = await getTokenSilently()
         let response = await fetch('/list', {
@@ -128,13 +137,13 @@ const ListView = ({ styles, actions }) => {
         _id: listToUpdate._id,
         timer: setTimeout(() => {
           apiUpdate(listToUpdate);
-        }, 1500)
+        }, 800)
       })
     } else {
       clearTimeout(deb.timer);
       deb.timer = setTimeout(() => {
         apiUpdate(listToUpdate);
-      }, 1500)
+      }, 800)
     }
   }
 
@@ -143,7 +152,6 @@ const ListView = ({ styles, actions }) => {
     const apiUpdate = async (taskToUpdateInner) =>{
       try {
         const tempTask = JSON.parse(JSON.stringify(taskToUpdateInner))
-        console.log(tempTask)
 
         const token = await getTokenSilently()
         let response = await fetch('/task', {
@@ -169,13 +177,13 @@ const ListView = ({ styles, actions }) => {
         _id: taskToUpdate._id,
         timer: setTimeout(() => {
           apiUpdate(taskToUpdate);
-        }, 1500)
+        }, 800)
       })
     } else {
       clearTimeout(deb.timer);
       deb.timer = setTimeout(() => {
         apiUpdate(taskToUpdate);
-      }, 1500)
+      }, 800)
     }
   }
 
@@ -205,7 +213,6 @@ const ListView = ({ styles, actions }) => {
         }
       })
       response = await response.json()
-      console.log(response)
     } catch(err) {
       console.warn(err)
     }
@@ -215,9 +222,10 @@ const ListView = ({ styles, actions }) => {
     setListLoading(true);
     apiGetNewList()
     .then((list) => {
-      const newLists = JSON.parse(JSON.stringify(lists));
+      let newLists = JSON.parse(JSON.stringify(lists));
       list.owner = actions.getUser();
       newLists.push(list);
+      newLists = indexLists(newLists);
       setLists(newLists)
       setListLoading(false);
     })
@@ -243,7 +251,6 @@ const ListView = ({ styles, actions }) => {
     const newLists = JSON.parse(JSON.stringify(lists));
     const list = newLists.splice(listIdx, 1)[0];
     list.owner = undefined;
-    console.log(JSON.stringify(list));
     apiUpdateList(list);
     setLists(newLists)
   }
@@ -252,11 +259,12 @@ const ListView = ({ styles, actions }) => {
     setTaskLoading(true);
     apiGetNewTask()
     .then((task) => {
-      const newLists = JSON.parse(JSON.stringify(lists));
+      let newLists = JSON.parse(JSON.stringify(lists));
       const list = newLists[listIdx];
       task.assignedUser = null;
       list.tasks.push(task);
-      apiUpdateList(list)
+      apiUpdateList(list);
+      newLists = indexLists(newLists);
       setLists(newLists);
       setTaskLoading(false);
     })
@@ -324,13 +332,9 @@ const ListView = ({ styles, actions }) => {
       apiGetLists()
       .then((lists) => {
         lists.forEach((list, lidx) => {
-          list.listIdx = lidx;
-          list.tasks.forEach((task, tidx) => {
-            task.taskIdx = tidx;
-          })
           if (list.owner === user._id) list.owner = user;
         });
-        console.log(lists)
+        lists = indexLists(lists);
         setLists(lists.length ? lists : []);
         setLoading(false);
       })
@@ -339,10 +343,10 @@ const ListView = ({ styles, actions }) => {
 
   const tasksRender = (list, listIdx) => list.tasks
   .filter(task => task.assignedUser && task.assignedUser._id === user._id)
-  .map((task) => {
+  .map((task, tidx) => {
     const { taskIdx } = task;
     return (
-      <Card key={`${task.assignedUser}${taskIdx}`}>
+      <Card key={`${task._id}`}>
         <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
           <span>
             <span
@@ -430,10 +434,10 @@ const ListView = ({ styles, actions }) => {
     )
   })
 
-  const tasksOwnerRender = (list, listIdx) => list.tasks.map((task) => {
+  const tasksOwnerRender = (list, listIdx) => list.tasks.map((task, tidx) => {
     const { taskIdx } = task;
     return (
-      <Card key={`${task.assignedUser}${taskIdx}`}>
+      <Card key={`${task._id}`}>
         <Accordion.Toggle as={Card.Header} eventKey={`${listIdx}${taskIdx}`}>
           <span>
             <span
@@ -558,10 +562,10 @@ const ListView = ({ styles, actions }) => {
     .filter((list) => owner 
       ? list.owner._id === user._id
       : list.tasks.some(task => task.assignedUser && task.assignedUser._id === user._id))
-    .map((list) => {
+    .map((list, lidx) => {
       const { listIdx } = list;
       return (
-        <Card key={`${list.tasks}${listIdx}`}>
+        <Card key={`${list._id}`}>
           <Accordion.Toggle as={Card.Header} eventKey={listIdx}>
           <span>
             <span 

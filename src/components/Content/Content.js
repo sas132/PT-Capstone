@@ -14,7 +14,6 @@ const Content = ({ styles, comp, actions, user }) => {
       setUserSent(true);
       getTokenSilently()
       .then(token => {
-        console.log('sending')
         return fetch("/user", {
           method: 'POST',
           headers: {
@@ -23,7 +22,7 @@ const Content = ({ styles, comp, actions, user }) => {
         });
       })
       .then(data => data.json())
-      .then(({ msg: user }) => {console.log(user);actions.setUser(user)})
+      .then(({ msg: user }) => {actions.setUser(user)})
       .catch(err => console.warn(err))
     }
   }, [isAuthenticated, userSent, actions, getTokenSilently])
