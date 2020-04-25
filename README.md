@@ -1,5 +1,6 @@
 # PT-Capstone
-```.github/workflows/deploy.yml  -Workflow script to auto deploy to Heroku. Commented out for grading.
+```
+.github/workflows/deploy.yml  -Workflow script to auto deploy to Heroku. Commented out for grading.
 controllers/list.js   -controller for list operations
 controllers/task.js   -controller for task operations
 controllers/user.js   -controller for user operations
@@ -18,9 +19,10 @@ src/components/FooterMenu/FooterMenu.js       -Component that displays the foote
 src/components/ListView/ListView.js           -Primary composite component used to display all lists and tasks
 src/components/Loading/Loading.js             -Simple loading component
 src/components/People/People.js               -Component to allow users to invite / add people. not finished or included in final deployment.
-src/components/Profile/Profile.js             -
-src/components/Settings/Settings.js
-src/components/Sidebar/Sidebar.js
-src/components/TopBar/TopBar.js
-src/components/UserSelector/UserSelector.js
-src/components/Welcome/Welcome.js```
+src/components/Profile/Profile.js             -Component displays profile details of current user
+src/components/Settings/Settings.js           -Settings Component. Mock up
+src/components/Sidebar/Sidebar.js             -Side navigation bar component handles user input
+src/components/TopBar/TopBar.js               -Top navigation bar component handles user input
+src/components/UserSelector/UserSelector.js   -Component to simplify selecting a valid user
+src/components/Welcome/Welcome.js             -Welcome component. Only view when not authenticated
+```
