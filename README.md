@@ -10,3 +10,6 @@ models/user.js  -user model
 public/favicon.ico  -icon for web app. default icon from react (whoops we never changed it)
 public/index.html   -landing page for web app
 public/*            -default logos, robot.txt, manifest.json
+services/listService.js   -functions to handle list db read / write
+services/taskService.js   -functions to handle task db read / write
+services/userService.js   -functions to handle user db read / write
