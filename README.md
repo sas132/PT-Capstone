@@ -1,6 +1,6 @@
 # PT-Capstone
 ```
-.github/workflows/deploy.yml  -Workflow script to auto deploy to Heroku. Commented out for grading.
+.github/workflows/deploy.yml  -Workflow script to auto deploy to Heroku. Commented out so we don't break the app while you grade it.
 controllers/list.js   -controller for list operations
 controllers/task.js   -controller for task operations
 controllers/user.js   -controller for user operations
