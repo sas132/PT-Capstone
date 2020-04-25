@@ -1,21 +1,21 @@
-name: Deploy
+# name: Deploy
 
-on:
-  push:
-    branches:
-      - master
+# on:
+#   push:
+#     branches:
+#       - master
 
-jobs:
-  build:
-    runs-on: ubuntu-16.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.0.2 # This is the action
-        with:
-          heroku_api_key: 3cfc3298-d7b0-4d12-97b8-b441978739ed
-          heroku_app_name: "doitappuwf" #Must be unique in Heroku
-          heroku_email:  "db119@students.uwf.edu"
-          branch: "master" #OPTIONAL and DEFAULT - 'HEAD' (a.k.a your current branch)
-          dontuseforce: false #OPTIONAL and DEFAULT - false
-          usedocker: false #OPTIONAL and DEFAULT - false
-          appdir: "" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
+# jobs:
+#   build:
+#     runs-on: ubuntu-16.04
+#     steps:
+#       - uses: actions/checkout@v2
+#       - uses: akhileshns/heroku-deploy@v3.0.2 # This is the action
+#         with:
+#           heroku_api_key: 3cfc3298-d7b0-4d12-97b8-b441978739ed
+#           heroku_app_name: "doitappuwf" #Must be unique in Heroku
+#           heroku_email:  "db119@students.uwf.edu"
+#           branch: "master" #OPTIONAL and DEFAULT - 'HEAD' (a.k.a your current branch)
+#           dontuseforce: false #OPTIONAL and DEFAULT - false
+#           usedocker: false #OPTIONAL and DEFAULT - false
+#           appdir: "" #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
